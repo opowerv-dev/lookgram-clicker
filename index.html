@@ -23,6 +23,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 40%,#4b1
 .hint{color:#cdaeb6;font-size:13px;margin-bottom:22px}
 .claim{width:100%;max-width:380px;border:0;border-radius:16px;padding:17px;background:linear-gradient(90deg,#ffcf58,#ff9e31);color:#411c08;font-size:16px;font-weight:900}
 .note{font-size:11px;color:#cdaeb6;text-align:center;margin:12px 0 8px}
+.progress{height:8px;background:#5a341b;border-radius:99px;overflow:hidden;margin-top:8px}.progress #tapBar{height:100%;width:0%;background:linear-gradient(90deg,#ffcf58,#ff8c27);transition:width .1s}
 </style>
 </head>
 <body>
@@ -30,7 +31,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 40%,#4b1
 <div class="brand">🔴 LOOKGRAM</div>
 <div class="subtitle">CLICKER • ЗАРАБАТЫВАЙ ЛУККОИНЫ</div>
 <div class="stats">
-<div class="stat"><div class="label">НАЖАТИЯ</div><div class="value" id="taps">0</div></div>
+<div class="stat"><div class="label">КЛИКИ</div><div class="value" id="tapProgress">0/1500</div><div class="progress"><div id="tapBar"></div></div></div>
 <div class="stat"><div class="label">ЗАРАБОТАНО</div><div class="value" id="earned">0.0 🪙</div></div>
 </div>
 <div class="coin-area" id="area"><button class="coin" id="coin">L</button></div>
@@ -42,11 +43,13 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 40%,#4b1
 const tg=window.Telegram?.WebApp;
 tg?.ready();tg?.expand();
 let taps=0,claimed=false;
+const MAX_TAPS=1500;
 const coin=document.getElementById('coin'),area=document.getElementById('area');
 coin.addEventListener('click',()=>{
-if(claimed)return;
+if(claimed || taps>=MAX_TAPS)return;
 taps++;
-document.getElementById('taps').textContent=taps;
+document.getElementById('tapProgress').textContent=taps+'/'+MAX_TAPS;
+document.getElementById('tapBar').style.width=(taps/MAX_TAPS*100)+'%';
 document.getElementById('earned').textContent=(taps/10).toFixed(1)+' 🪙';
 const el=document.createElement('span');
 el.className='float';el.textContent='+0.1 🪙';
