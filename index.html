@@ -37,8 +37,8 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 40%,#4b1
 </div>
 <div class="coin-area" id="area"><button class="coin" id="coin">L</button></div>
 <div class="hint">Нажимай на монету, чтобы заработать</div>
-<button type="button" class="claim" id="claim">🎁 ЗАБРАТЬ ЛУККОИНЫ</button>
-<button type="button" class="claim" id="transfer">🔄 ПЕРЕВЕСТИ НА ОСНОВНОЙ БАЛАНС</button>
+
+<button type="button" class="claim" id="transfer">🔄 ПЕРЕНЕСТИ НА ОСНОВНОЙ БАЛАНС</button>
 <div class="note" id="earned">Заработано: 0.0 🪙</div>
 </div>
 <script>
@@ -137,33 +137,19 @@ document.getElementById('claim').addEventListener('click',()=>{
     return;
   }
 
-  const btn=document.getElementById('claim');
-  btn.disabled=true;
-  btn.textContent='⏳ ОТПРАВКА ЗАЯВКИ...';
-
-  try {
-    tg.sendData(JSON.stringify({action:'clicker_claim',taps}));
-    claimed=true;
-    deadline=Date.now()+COOLDOWN;
-    saveState();
-    render();
-  } catch(e) {
-    btn.disabled=false;
-    btn.textContent='🎁 ЗАБРАТЬ ЛУККОИНЫ';
-    alert('Не удалось отправить заявку. Закрой и снова открой кликер через бота.');
-  }
-});
-
-
+  
 document.getElementById('transfer').addEventListener('click',()=>{
   if(!tg || typeof tg.sendData !== 'function'){
     alert('Открой кликер через кнопку в Telegram.');
     return;
   }
-  if(!confirm('Перевести весь баланс кликера на основной баланс?')) return;
-  tg.sendData(JSON.stringify({action:'clicker_transfer'}));
+  if(taps < 10){
+    alert('Нужно минимум 10 кликов для перевода.');
+    return;
+  }
+  if(!confirm('Перевести заработанные Луккоины на основной баланс?')) return;
+  tg.sendData(JSON.stringify({action:'clicker_transfer',taps}));
 });
-
 if(deadline && Date.now()>=deadline){
   taps=0;
   deadline=0;
