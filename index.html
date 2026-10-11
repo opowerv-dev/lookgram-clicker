@@ -48,9 +48,9 @@ tg?.expand();
 
 const MAX_TAPS=1500;
 const COOLDOWN=5*60*60*1000;
-const TAP_KEY='lookgram_clicker_taps_v1';
-const DEADLINE_KEY='lookgram_clicker_deadline_v1';
-const CLAIMED_KEY='lookgram_clicker_claimed_v1';
+const TAP_KEY='lookgram_clicker_taps_v2';
+const DEADLINE_KEY='lookgram_clicker_deadline_v2';
+const CLAIMED_KEY='lookgram_clicker_claimed_v2';
 
 let taps=Math.min(MAX_TAPS,Math.max(0,Number(localStorage.getItem(TAP_KEY))||0));
 let deadline=Number(localStorage.getItem(DEADLINE_KEY))||0;
@@ -101,7 +101,7 @@ const coin=document.getElementById('coin');
 const area=document.getElementById('area');
 
 coin.addEventListener('click',()=>{
-  if(claimed || taps>=MAX_TAPS || (deadline && Date.now()<deadline))return;
+  if(taps>=MAX_TAPS)return;
 
   taps++;
   if(taps===MAX_TAPS && !deadline) deadline=Date.now()+COOLDOWN;
