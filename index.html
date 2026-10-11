@@ -48,9 +48,9 @@ tg?.expand();
 
 const MAX_TAPS=1500;
 const COOLDOWN=5*60*60*1000;
-const TAP_KEY='lookgram_clicker_taps_v2';
-const DEADLINE_KEY='lookgram_clicker_deadline_v2';
-const CLAIMED_KEY='lookgram_clicker_claimed_v2';
+const TAP_KEY='lookgram_clicker_taps_v3';
+const DEADLINE_KEY='lookgram_clicker_deadline_v3';
+const CLAIMED_KEY='lookgram_clicker_claimed_v3';
 
 let taps=Math.min(MAX_TAPS,Math.max(0,Number(localStorage.getItem(TAP_KEY))||0));
 let deadline=Number(localStorage.getItem(DEADLINE_KEY))||0;
@@ -130,7 +130,9 @@ document.getElementById('transfer').addEventListener('click',()=>{
     return;
   }
   if(!confirm('Перенести заработанные Луккоины на основной баланс?')) return;
-  tg.sendData(JSON.stringify({action:'clicker_transfer',taps}));
+  const sentTaps=taps;
+  tg.sendData(JSON.stringify({action:'clicker_transfer',taps:sentTaps}));
+  taps=0; deadline=0; claimed=false; saveState(); render();
 });
 if(deadline && Date.now()>=deadline){
   taps=0;
