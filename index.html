@@ -11,7 +11,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 40%,#4b1
 .app{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:25px 18px}
 .brand{font-size:25px;font-weight:900;letter-spacing:2px;margin-top:12px}
 .subtitle{color:#d8aeb8;font-size:13px;margin-top:7px}
-.stats{display:flex;gap:12px;width:100%;max-width:380px;margin-top:30px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:420px;margin-top:30px}
 .stat{flex:1;background:#ffffff0d;border:1px solid #ffffff18;border-radius:17px;padding:15px 8px;text-align:center}
 .label{font-size:12px;color:#cdaeb6}
 .value{font-size:22px;font-weight:bold;margin-top:7px}
@@ -32,40 +32,115 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 40%,#4b1
 <div class="subtitle">CLICKER • ЗАРАБАТЫВАЙ ЛУККОИНЫ</div>
 <div class="stats">
 <div class="stat"><div class="label">КЛИКИ</div><div class="value" id="tapProgress">0/1500</div><div class="progress"><div id="tapBar"></div></div></div>
-<div class="stat"><div class="label">ЗАРАБОТАНО</div><div class="value" id="earned">0.0 🪙</div></div>
+<div class="stat"><div class="label">ОБНОВЛЕНИЕ ЛИМИТА</div><div class="value" id="timer">05:00:00</div><div class="label" id="timerStatus">Ожидание 1500 кликов</div></div>
 </div>
 <div class="coin-area" id="area"><button class="coin" id="coin">L</button></div>
 <div class="hint">Нажимай на монету, чтобы заработать</div>
 <button class="claim" id="claim">🎁 ЗАБРАТЬ ЛУККОИНЫ</button>
-<div class="note">Подключение к балансу бота будет следующим шагом.</div>
+<div class="note" id="earned">Заработано: 0.0 🪙</div>
 </div>
 <script>
+
 const tg=window.Telegram?.WebApp;
-tg?.ready();tg?.expand();
-let taps=0,claimed=false;
+tg?.ready();
+tg?.expand();
+
 const MAX_TAPS=1500;
-const coin=document.getElementById('coin'),area=document.getElementById('area');
+const COOLDOWN=5*60*60*1000;
+const TAP_KEY='lookgram_clicker_taps_v1';
+const DEADLINE_KEY='lookgram_clicker_deadline_v1';
+const CLAIMED_KEY='lookgram_clicker_claimed_v1';
+
+let taps=Math.min(MAX_TAPS,Math.max(0,Number(localStorage.getItem(TAP_KEY))||0));
+let deadline=Number(localStorage.getItem(DEADLINE_KEY))||0;
+let claimed=localStorage.getItem(CLAIMED_KEY)==='1';
+
+function saveState(){
+  localStorage.setItem(TAP_KEY,String(taps));
+  localStorage.setItem(DEADLINE_KEY,String(deadline));
+  localStorage.setItem(CLAIMED_KEY,claimed?'1':'0');
+}
+
+function render(){
+  const now=Date.now();
+
+  if(deadline && now>=deadline){
+    taps=0;
+    deadline=0;
+    claimed=false;
+    saveState();
+  }
+
+  document.getElementById('tapProgress').textContent=taps+'/'+MAX_TAPS;
+  document.getElementById('tapBar').style.width=(taps/MAX_TAPS*100)+'%';
+  document.getElementById('earned').textContent='Заработано: '+(taps/10).toFixed(1)+' 🪙';
+
+  const timer=document.getElementById('timer');
+  const status=document.getElementById('timerStatus');
+
+  if(taps<MAX_TAPS){
+    timer.textContent='05:00:00';
+    status.textContent='Ожидание 1500 кликов';
+  }else{
+    if(!deadline){
+      deadline=now+COOLDOWN;
+      saveState();
+    }
+    const left=Math.max(0,deadline-now);
+    const h=Math.floor(left/3600000);
+    const m=Math.floor((left%3600000)/60000);
+    const sec=Math.floor((left%60000)/1000);
+    timer.textContent=[h,m,sec].map(n=>String(n).padStart(2,'0')).join(':');
+    status.textContent=claimed?'Лимит восстанавливается':'Лимит заполнен';
+  }
+
+  document.getElementById('claim').disabled =
+    taps<MAX_TAPS || claimed || (deadline>0 && Date.now()>=deadline);
+}
+
+const coin=document.getElementById('coin');
+const area=document.getElementById('area');
+
 coin.addEventListener('click',()=>{
-if(claimed || taps>=MAX_TAPS)return;
-taps++;
-document.getElementById('tapProgress').textContent=taps+'/'+MAX_TAPS;
-document.getElementById('tapBar').style.width=(taps/MAX_TAPS*100)+'%';
-document.getElementById('earned').textContent=(taps/10).toFixed(1)+' 🪙';
-const el=document.createElement('span');
-el.className='float';el.textContent='+0.1 🪙';
-const r=coin.getBoundingClientRect(),a=area.getBoundingClientRect();
-el.style.left=(r.left+r.width/2-a.left)+'px';
-el.style.top=(r.top+r.height/2-a.top)+'px';
-el.style.setProperty('--x',(Math.random()*180-90)+'px');
-el.style.setProperty('--y',(-50-Math.random()*100)+'px');
-area.appendChild(el);setTimeout(()=>el.remove(),850);
+  if(claimed || taps>=MAX_TAPS || (deadline && Date.now()<deadline))return;
+
+  taps++;
+  if(taps===MAX_TAPS && !deadline) deadline=Date.now()+COOLDOWN;
+  saveState();
+  render();
+
+  const el=document.createElement('span');
+  el.className='float';
+  el.textContent='+0.1 🪙';
+  const r=coin.getBoundingClientRect(),a=area.getBoundingClientRect();
+  el.style.left=(r.left+r.width/2-a.left)+'px';
+  el.style.top=(r.top+r.height/2-a.top)+'px';
+  el.style.setProperty('--x',(Math.random()*180-90)+'px');
+  el.style.setProperty('--y',(-50-Math.random()*100)+'px');
+  area.appendChild(el);
+  setTimeout(()=>el.remove(),850);
 });
+
 document.getElementById('claim').addEventListener('click',()=>{
-if(!taps||claimed)return;
-if(!tg){alert('Открой кликер через Telegram.');return;}
-claimed=true;
-tg.sendData(JSON.stringify({action:'clicker_claim',taps}));
+  if(taps!==MAX_TAPS || claimed)return;
+  if(!tg){alert('Открой кликер через Telegram.');return;}
+
+  claimed=true;
+  deadline=Date.now()+COOLDOWN;
+  saveState();
+  render();
+  tg.sendData(JSON.stringify({action:'clicker_claim',taps}));
 });
+
+if(deadline && Date.now()>=deadline){
+  taps=0;
+  deadline=0;
+  claimed=false;
+  saveState();
+}
+render();
+setInterval(render,1000);
+
 </script>
 </body>
 </html>
