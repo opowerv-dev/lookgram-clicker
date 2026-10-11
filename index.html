@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Lookgram Clicker</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 40%,#4b1723,#160b12 75%);color:white;font-family:Arial,sans-serif}
+.app{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:25px 18px}
+.brand{font-size:25px;font-weight:900;letter-spacing:2px;margin-top:12px}
+.subtitle{color:#d8aeb8;font-size:13px;margin-top:7px}
+.stats{display:flex;gap:12px;width:100%;max-width:380px;margin-top:30px}
+.stat{flex:1;background:#ffffff0d;border:1px solid #ffffff18;border-radius:17px;padding:15px 8px;text-align:center}
+.label{font-size:12px;color:#cdaeb6}
+.value{font-size:22px;font-weight:bold;margin-top:7px}
+.coin-area{position:relative;display:grid;place-items:center;flex:1;width:100%;min-height:280px}
+.coin{width:min(65vw,250px);aspect-ratio:1;border-radius:50%;border:5px solid #ffdc78;background:radial-gradient(circle at 35% 25%,#fff3a3,#ffbd35 45%,#d87512 80%);box-shadow:0 0 35px #ffb52d66,inset 0 0 0 8px #ffdf7655,inset 0 -12px 20px #a94c15;color:#79360c;font-size:100px;font-weight:900;display:grid;place-items:center;touch-action:manipulation;user-select:none}
+.coin:active{transform:scale(.94)}
+.float{position:absolute;pointer-events:none;font-weight:900;font-size:19px;color:#ffe18a;text-shadow:0 2px 10px #ff9b18;animation:fly .8s ease-out forwards;white-space:nowrap}
+@keyframes fly{0%{opacity:1;transform:translate(0,0) scale(.8)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.2)}}
+.hint{color:#cdaeb6;font-size:13px;margin-bottom:22px}
+.claim{width:100%;max-width:380px;border:0;border-radius:16px;padding:17px;background:linear-gradient(90deg,#ffcf58,#ff9e31);color:#411c08;font-size:16px;font-weight:900}
+.note{font-size:11px;color:#cdaeb6;text-align:center;margin:12px 0 8px}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="brand">🔴 LOOKGRAM</div>
+<div class="subtitle">CLICKER • ЗАРАБАТЫВАЙ ЛУККОИНЫ</div>
+<div class="stats">
+<div class="stat"><div class="label">НАЖАТИЯ</div><div class="value" id="taps">0</div></div>
+<div class="stat"><div class="label">ЗАРАБОТАНО</div><div class="value" id="earned">0.0 🪙</div></div>
+</div>
+<div class="coin-area" id="area"><button class="coin" id="coin">L</button></div>
+<div class="hint">Нажимай на монету, чтобы заработать</div>
+<button class="claim" id="claim">🎁 ЗАБРАТЬ ЛУККОИНЫ</button>
+<div class="note">Подключение к балансу бота будет следующим шагом.</div>
+</div>
+<script>
+const tg=window.Telegram?.WebApp;
+tg?.ready();tg?.expand();
+let taps=0,claimed=false;
+const coin=document.getElementById('coin'),area=document.getElementById('area');
+coin.addEventListener('click',()=>{
+if(claimed)return;
+taps++;
+document.getElementById('taps').textContent=taps;
+document.getElementById('earned').textContent=(taps/10).toFixed(1)+' 🪙';
+const el=document.createElement('span');
+el.className='float';el.textContent='+0.1 🪙';
+const r=coin.getBoundingClientRect(),a=area.getBoundingClientRect();
+el.style.left=(r.left+r.width/2-a.left)+'px';
+el.style.top=(r.top+r.height/2-a.top)+'px';
+el.style.setProperty('--x',(Math.random()*180-90)+'px');
+el.style.setProperty('--y',(-50-Math.random()*100)+'px');
+area.appendChild(el);setTimeout(()=>el.remove(),850);
+});
+document.getElementById('claim').addEventListener('click',()=>{
+if(!taps||claimed)return;
+if(!tg){alert('Открой кликер через Telegram.');return;}
+claimed=true;
+tg.sendData(JSON.stringify({action:'clicker_claim',taps}));
+});
+</script>
+</body>
+</html>
