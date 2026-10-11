@@ -95,8 +95,7 @@ function render(){
     status.textContent=claimed?'Лимит восстанавливается':'Лимит заполнен';
   }
 
-  document.getElementById('claim').disabled =
-    taps<MAX_TAPS || claimed || (deadline>0 && Date.now()>=deadline);
+  document.getElementById('claim').disabled = claimed;
 }
 
 const coin=document.getElementById('coin');
@@ -123,8 +122,12 @@ coin.addEventListener('click',()=>{
 });
 
 document.getElementById('claim').addEventListener('click',()=>{
-  if(taps!==MAX_TAPS || claimed){
-    alert('Сначала набери 1500 кликов и дождись доступности сбора.');
+  if(claimed){
+    alert('Заявка уже отправлена. Дождись следующего сбора.');
+    return;
+  }
+  if(taps <= 0){
+    alert('Сначала накопи хотя бы немного Луккоинов.');
     return;
   }
   if(!tg || typeof tg.sendData !== 'function'){
