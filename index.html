@@ -11,7 +11,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 40%,#4b1
 .app{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:25px 18px}
 .brand{font-size:25px;font-weight:900;letter-spacing:2px;margin-top:12px}
 .subtitle{color:#d8aeb8;font-size:13px;margin-top:7px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:420px;margin-top:30px}
+.balance{width:100%;max-width:420px;text-align:center;margin-top:22px;padding:14px;background:#ffffff0d;border:1px solid #ffffff18;border-radius:17px}.balance .value{font-size:27px;color:#ffcf58}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:420px;margin-top:30px}
 .stat{flex:1;background:#ffffff0d;border:1px solid #ffffff18;border-radius:17px;padding:15px 8px;text-align:center}
 .label{font-size:12px;color:#cdaeb6}
 .value{font-size:22px;font-weight:bold;margin-top:7px}
@@ -21,7 +21,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 40%,#4b1
 .float{position:absolute;pointer-events:none;font-weight:900;font-size:19px;color:#ffe18a;text-shadow:0 2px 10px #ff9b18;animation:fly .8s ease-out forwards;white-space:nowrap}
 @keyframes fly{0%{opacity:1;transform:translate(0,0) scale(.8)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.2)}}
 .hint{color:#cdaeb6;font-size:13px;margin-bottom:22px}
-.claim{width:100%;max-width:380px;border:0;border-radius:16px;padding:17px;background:linear-gradient(90deg,#ffcf58,#ff9e31);color:#411c08;font-size:16px;font-weight:900}
+.claim{cursor:pointer;touch-action:manipulation;position:relative;z-index:5;pointer-events:auto;width:100%;max-width:380px;border:0;border-radius:16px;padding:17px;background:linear-gradient(90deg,#ffcf58,#ff9e31);color:#411c08;font-size:16px;font-weight:900}
 .note{font-size:11px;color:#cdaeb6;text-align:center;margin:12px 0 8px}
 .progress{height:8px;background:#5a341b;border-radius:99px;overflow:hidden;margin-top:8px}.progress #tapBar{height:100%;width:0%;background:linear-gradient(90deg,#ffcf58,#ff8c27);transition:width .1s}
 </style>
@@ -30,13 +30,14 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 40%,#4b1
 <div class="app">
 <div class="brand">🔴 LOOKGRAM</div>
 <div class="subtitle">CLICKER • ЗАРАБАТЫВАЙ ЛУККОИНЫ</div>
+<div class="balance"><div class="label">МОЙ БАЛАНС</div><div class="value" id="balance">Проверь в боте</div></div>
 <div class="stats">
 <div class="stat"><div class="label">КЛИКИ</div><div class="value" id="tapProgress">0/1500</div><div class="progress"><div id="tapBar"></div></div></div>
 <div class="stat"><div class="label">ОБНОВЛЕНИЕ ЛИМИТА</div><div class="value" id="timer">05:00:00</div><div class="label" id="timerStatus">Ожидание 1500 кликов</div></div>
 </div>
 <div class="coin-area" id="area"><button class="coin" id="coin">L</button></div>
 <div class="hint">Нажимай на монету, чтобы заработать</div>
-<button class="claim" id="claim">🎁 ЗАБРАТЬ ЛУККОИНЫ</button>
+<button type="button" class="claim" id="claim">🎁 ЗАБРАТЬ ЛУККОИНЫ</button>
 <div class="note" id="earned">Заработано: 0.0 🪙</div>
 </div>
 <script>
@@ -122,14 +123,30 @@ coin.addEventListener('click',()=>{
 });
 
 document.getElementById('claim').addEventListener('click',()=>{
-  if(taps!==MAX_TAPS || claimed)return;
-  if(!tg){alert('Открой кликер через Telegram.');return;}
+  if(taps!==MAX_TAPS || claimed){
+    alert('Сначала набери 1500 кликов и дождись доступности сбора.');
+    return;
+  }
+  if(!tg || typeof tg.sendData !== 'function'){
+    alert('Открой кликер через кнопку в Telegram.');
+    return;
+  }
 
-  claimed=true;
-  deadline=Date.now()+COOLDOWN;
-  saveState();
-  render();
-  tg.sendData(JSON.stringify({action:'clicker_claim',taps}));
+  const btn=document.getElementById('claim');
+  btn.disabled=true;
+  btn.textContent='⏳ ОТПРАВКА ЗАЯВКИ...';
+
+  try {
+    tg.sendData(JSON.stringify({action:'clicker_claim',taps}));
+    claimed=true;
+    deadline=Date.now()+COOLDOWN;
+    saveState();
+    render();
+  } catch(e) {
+    btn.disabled=false;
+    btn.textContent='🎁 ЗАБРАТЬ ЛУККОИНЫ';
+    alert('Не удалось отправить заявку. Закрой и снова открой кликер через бота.');
+  }
 });
 
 if(deadline && Date.now()>=deadline){
