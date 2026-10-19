@@ -1,559 +1,323 @@
-<!DOCTYPE html>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b080e"><title>LOOKGRAM — Clicker</title><style>
+:root{--bg:#0b080e;--panel:#171019ed;--line:#43283a;--muted:#b8a5b5;--red:#ff4168}*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;min-height:100vh;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 50% 0%,#3a1021,transparent 47%),radial-gradient(ellipse at 95% 70%,#280b1b,transparent 43%),#0b080e;overflow-x:hidden}.fx{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;contain:strict}.fx:before{content:"";position:absolute;inset:-40%;opacity:.42;background:radial-gradient(ellipse at 25% 35%,#ff204522,transparent 22%),radial-gradient(ellipse at 75% 65%,#ff17401c,transparent 25%),repeating-linear-gradient(116deg,transparent 0 150px,#ff34550b 151px,#ff34551c 152px,transparent 154px 270px);animation:nebula 22s ease-in-out infinite alternate}.fx:after{content:"";position:absolute;inset:0;opacity:0;background:radial-gradient(ellipse at 18% 22%,#ff24454d,transparent 38%),radial-gradient(ellipse at 83% 66%,#ff16302b,transparent 42%);animation:flash 14s ease-in-out infinite}.streak{position:absolute;top:115%;left:var(--x);width:var(--w);height:var(--h);border-radius:99px;opacity:0;transform:rotate(var(--r));background:linear-gradient(to top,transparent,#ff25451b 25%,#ff456b 45%,#ffd1d9 52%,#ff365b88 63%,transparent);filter:drop-shadow(0 0 5px #ff31555e);animation:rise var(--dur) linear var(--delay) infinite}.spark{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;opacity:0;background:#ffd7df;box-shadow:0 0 6px 2px #ff496a99,0 0 17px 3px #ff24455c;animation:twinkle var(--dur) ease-in-out var(--delay) infinite}@keyframes nebula{to{transform:translate(3%,2%) rotate(3deg) scale(1.08)}}@keyframes flash{0%,8%,17%,100%{opacity:0}10%{opacity:.33}12%{opacity:.04}14%{opacity:.2}16%{opacity:0}}@keyframes rise{0%{transform:translateY(0) translateX(0) rotate(var(--r));opacity:0}6%{opacity:var(--o)}70%{opacity:var(--o)}100%{transform:translateY(-145vh) translateX(var(--drift)) rotate(var(--r));opacity:0}}@keyframes twinkle{0%,100%{opacity:0;transform:translateY(8px) scale(.5)}30%{opacity:var(--o)}65%{opacity:calc(var(--o)*.55);transform:translate(var(--drift),-28px) scale(1.25)}}@keyframes enter{from{opacity:.5;transform:translateY(6px)}to{opacity:1;transform:none}}@keyframes floatCoin{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-5px) rotate(2deg)}}@keyframes pulse{0%,100%{box-shadow:0 0 0 1px #ff41681a,0 0 22px #ff31551a}50%{box-shadow:0 0 0 5px #ff41680a,0 0 36px #ff31553b}}.app{position:relative;z-index:1;max-width:560px;margin:auto;padding:14px 15px calc(145px + env(safe-area-inset-bottom))}header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px 2px 17px}.brand{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:950;letter-spacing:1.7px}.logo{width:39px;height:39px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#ff6c87,#8e1236);border:1px solid #ff9aac;box-shadow:0 5px 20px #ff315526;font-size:23px}.brand small{display:block;font-size:8px;color:#bba5b5;letter-spacing:2px;margin-top:3px}.balance{border:1px solid #67404d;background:#21131fe8;border-radius:13px;padding:9px 11px;font-size:12px;font-weight:900;color:#ffe0e6;white-space:nowrap}.balance span{color:#ff8ba0;margin-right:5px}.screen{display:none;animation:enter .24s ease-out}.screen.active{display:block}.hero{position:relative;overflow:hidden;border:1px solid #563044;border-radius:22px;padding:20px 18px 17px;background:linear-gradient(135deg,#2b1424ed,#15101bf2 68%,#21101c);box-shadow:0 15px 35px #0005,inset 0 1px #ffffff0a}.hero:after{content:"";position:absolute;right:-45px;top:-70px;width:180px;height:180px;border:1px solid #ff64801d;border-radius:50%;box-shadow:0 0 0 17px #ff64800b,0 0 0 36px #ff648008;pointer-events:none}.kicker{font-size:9px;letter-spacing:2.5px;font-weight:900;color:#ff8ca2}h1{font-size:29px;line-height:1.08;letter-spacing:-.8px;margin:11px 0 9px;position:relative;z-index:1}p{margin:0;color:#c2afbf;font-size:12px;line-height:1.6}.hero-bottom{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-top:19px}.stat small{display:block;color:#a991a4;font-size:8px;letter-spacing:1.1px;font-weight:800}.stat b{display:block;font-size:20px;margin-top:4px;color:#ffe1e7}.online{font-size:8px;letter-spacing:.7px;color:#83e7b1;border:1px solid #286448;background:#10281f;border-radius:99px;padding:7px 9px;white-space:nowrap}.coin-area{text-align:center;padding:19px 0 15px}.coin{width:156px;height:156px;border-radius:50%;padding:0;display:grid;place-items:center;margin:auto;position:relative;border:2px solid #e8a3ad;background:radial-gradient(circle at 29% 19%,#fff5e9 0%,#f6c5bc 5%,transparent 17%),radial-gradient(circle at 35% 28%,#f4b1a9 0%,#b94452 30%,#6f1c35 64%,#240e1b 100%);box-shadow:inset 0 0 0 4px #f5c0b522,inset 0 0 0 8px #270d1d88,inset -9px -12px 18px #130711b8,0 9px 28px #0008,0 0 28px #ff315526;animation:floatCoin 4.5s ease-in-out infinite,pulse 5s ease-in-out infinite;cursor:pointer}.coin:before{content:"";position:absolute;inset:10%;border:1px solid #ffd0b955;border-radius:50%;box-shadow:inset 0 0 0 2px #ffffff0a}.coin-face{position:relative;width:69%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;color:#541326;font:900 44px/1 Georgia,serif;text-shadow:0 1px #ffe1d6,0 -1px #64192d;border:2px solid #f5c2b7;background:linear-gradient(145deg,#f4c8b9,#d77a79 28%,#a83a51 65%,#692039);box-shadow:inset 2px 3px 5px #fff6,inset -4px -6px 9px #3b0c2380,0 2px 4px #0008}.coin-face:after{content:"LG";position:absolute;bottom:8%;font:900 8px/1 Arial,sans-serif;letter-spacing:2px;color:#ffe0d7}.reward{font-size:23px;font-weight:950;color:#ffe0e6;text-shadow:0 0 16px #ff31553d;margin-top:12px}.subtle{font-size:10px;color:#a991a4;margin-top:6px}.btn{width:100%;border:1px solid #ff8198;border-radius:14px;padding:14px 13px;background:linear-gradient(110deg,#c91e4b,#8c1638 58%,#5e142f);color:#fff;font-size:12px;font-weight:900;letter-spacing:.25px;box-shadow:0 7px 22px #ff31551b,inset 0 1px #ffffff25;cursor:pointer}.btn.secondary{background:linear-gradient(145deg,#291b2a,#1b1320);border-color:#53374b;color:#f6dce5;box-shadow:none}.panel{margin-top:11px;border:1px solid #3e293c;border-radius:17px;padding:14px;background:linear-gradient(145deg,#1b131fef,#110d15f2);box-shadow:0 8px 24px #0002,inset 0 1px #ffffff07}.panel-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;font-size:12px;font-weight:900}.tag{font-size:8px;letter-spacing:.8px;border:1px solid #593247;background:#2c1728;color:#ff9db0;padding:6px 8px;border-radius:99px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #352333;font-size:11px;color:#cbb8c8}.row:last-child{border-bottom:0;padding-bottom:0}.row b{color:#ffe0e6;font-size:11px}.meter{height:6px;border-radius:99px;background:#30202f;overflow:hidden;margin-top:10px}.meter span{display:block;width:57.6%;height:100%;border-radius:99px;background:linear-gradient(90deg,#a8173e,#ff8299);box-shadow:0 0 12px #ff416866}.upgrade{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid #352333}.upgrade:last-child{border:0}.up-icon{width:43px;height:43px;flex:none;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#3a1b2b,#211523);border:1px solid #573047;font-size:21px}.up-copy{flex:1;min-width:0}.up-copy b{display:block;font-size:11px}.up-copy small{display:block;color:#a991a4;font-size:9px;line-height:1.5;margin-top:4px}.price{border:1px solid #67404d;background:#321729;color:#ffdce5;border-radius:10px;padding:9px 10px;font-size:9px;font-weight:900;white-space:nowrap;cursor:pointer}.profile{display:flex;align-items:center;gap:12px}.avatar{width:57px;height:57px;flex:none;border-radius:18px;display:grid;place-items:center;background:linear-gradient(145deg,#ff718b,#8b1235);border:1px solid #ff9bad;font-size:26px;font-weight:950;box-shadow:0 0 20px #ff315522}.profile h3{margin:0;font-size:16px}.profile p{margin-top:4px;font-size:10px}.badge{display:inline-block;margin-top:7px;font-size:9px;border:1px solid #286448;background:#10281f;color:#83e7b1;padding:5px 8px;border-radius:99px}.notice{margin-top:12px;border:1px dashed #5a3a4d;border-radius:13px;padding:11px;color:#bdaabb;font-size:10px;line-height:1.5}.nav{position:fixed;z-index:10;left:50%;transform:translateX(-50%);bottom:0;width:min(100%,560px);padding:8px 7px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;border:1px solid #3c2537;border-bottom:0;border-radius:19px 19px 0 0;background:#160e18ed;backdrop-filter:blur(18px)}.nav button{border:0;background:transparent;color:#a994a6;padding:12px 3px;min-height:46px;border-radius:11px;font-size:9px;font-weight:850;display:flex;flex-direction:row;align-items:center;justify-content:center;white-space:nowrap;gap:4px;cursor:pointer}.nav .ico{font-size:15px;line-height:1}.nav button.active{color:#ff8da3;background:#3a1728;box-shadow:inset 0 0 0 1px #ff5a7a26}.toast{position:fixed;z-index:30;left:50%;top:calc(12px + env(safe-area-inset-top));bottom:auto;transform:translate(-50%,-9px);opacity:0;pointer-events:none;width:min(calc(100% - 24px),500px);min-height:82px;display:flex;align-items:center;overflow:hidden;background:linear-gradient(145deg,#351a30fa,#170f1bf7);border:1px solid #a64c70;border-radius:18px;padding:20px 20px 24px;font-size:15px;font-weight:850;line-height:1.5;white-space:normal;box-shadow:0 12px 35px #0008;transition:opacity .28s ease,transform .28s ease}.toast:after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;background:linear-gradient(90deg,#ff4168,#ffb0c0);transform:scaleX(1);transform-origin:left}.toast.show{opacity:1;transform:translate(-50%,0)}.toast.show:after{animation:toastProgress 2.8s linear forwards}@keyframes toastProgress{to{transform:scaleX(0)}}.toast.hiding{opacity:0;transform:translate(-50%,-8px)}@media(min-width:500px){.app{padding-left:20px;padding-right:20px}h1{font-size:32px}.coin{width:170px;height:170px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
 
-<html lang="ru">
-<head>
-<meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#10080e" name="theme-color"/><script src="https://telegram.org/js/telegram-web-app.js"></script><title>Lookgram — Кликер, Апгрейдер, Профиль</title>
-<style>
-:root{color-scheme:dark;--bg:#10080e;--panel:#1a1019;--panel2:#211420;--line:#3a2334;--red:#ff4264;--red2:#d71948;--pink:#ff8da3;--gold:#ffd778;--green:#65efb0;--muted:#ad9ba9;--blue:#8abaff;--radius:18px}*{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;min-height:100vh;color:#fff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 50% -10%,#552035 0,transparent 43%),linear-gradient(180deg,#140b13,#0d080e 65%);-webkit-tap-highlight-color:transparent}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.42;cursor:not-allowed;filter:saturate(.5)}.app{width:min(100%,600px);margin:auto;padding:calc(12px + env(safe-area-inset-top)) 14px calc(92px + env(safe-area-inset-bottom));min-height:100dvh}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 1px 15px}.brand{display:flex;align-items:center;gap:10px;font-weight:950;letter-spacing:1.1px;font-size:15px}.brand-logo{width:39px;height:39px;border-radius:13px;display:grid;place-items:center;font-size:23px;font-weight:1000;background:linear-gradient(145deg,#ff6c83,#c60d3a);box-shadow:0 7px 24px #f42b5944,inset 0 1px #ffffff80}.brand small{display:block;font-size:9px;color:#d5a4b7;letter-spacing:2px;margin-top:2px}.top-right{display:flex;align-items:center;gap:7px}.icon-btn,.balance-pill{border:1px solid var(--line);background:#21131f;color:#fff;border-radius:13px;min-height:39px;padding:8px 11px}.balance-pill{display:flex;align-items:center;gap:7px;font-weight:850;color:var(--gold);font-size:13px}.balance-pill span{color:#fff;font-size:11px}.hero{border:1px solid #6b2a43;border-radius:23px;padding:17px 16px 16px;background:linear-gradient(120deg,#391523,#1e101d 62%,#17101c);position:relative;overflow:hidden;box-shadow:0 12px 35px #0003}.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-60px;top:-80px;background:#ff385c1b;filter:blur(4px)}.hero-kicker{font-size:10px;letter-spacing:2px;color:#ff9bb0;font-weight:850}.hero h1{font-size:25px;line-height:1.1;margin:7px 0 7px;letter-spacing:-.8px}.hero p{font-size:12px;line-height:1.5;color:#c7afbf;margin:0;max-width:380px}.hero-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}.stat{display:flex;flex-direction:column;gap:3px}.stat b{font-size:17px;color:var(--gold)}.stat small{font-size:9px;color:#b69aab;letter-spacing:1px}.live-dot{font-size:10px;color:#a1f8c9;background:#123324;border:1px solid #285a41;padding:7px 9px;border-radius:99px;white-space:nowrap}.notice{margin:12px 0;padding:10px 12px;border:1px solid #63452b;border-radius:12px;background:#2b1d16;color:#ffdaa3;font-size:10px;line-height:1.5}.section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:21px 2px 10px}.section-head h2{margin:0;font-size:15px;letter-spacing:-.2px}.section-head span{font-size:10px;color:var(--muted)}.game-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.game-card{position:relative;overflow:hidden;text-align:left;min-height:120px;border:1px solid var(--line);border-radius:17px;padding:13px;background:linear-gradient(145deg,#241622,#160e17);color:white;transition:transform .15s,border-color .15s}.game-card:active{transform:scale(.985)}.game-card.active{border-color:#ff5977;box-shadow:inset 0 0 0 1px #ff597733,0 8px 22px #d31c4530}.game-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;font-size:23px;background:linear-gradient(140deg,#542035,#301321);border:1px solid #6e2a44;margin-bottom:11px}.game-card strong{display:block;font-size:14px}.game-card small{display:block;margin-top:4px;color:var(--muted);font-size:10px}.game-tag{position:absolute;top:11px;right:10px;font-size:8px;letter-spacing:.5px;color:#ffc5d0;background:#4a1d2c;border:1px solid #773147;padding:5px 6px;border-radius:99px}.game-view{margin-top:14px}.panel{background:linear-gradient(150deg,#211520,#171018);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-top:11px}.panel-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}.panel-title b{font-size:13px}.eyebrow{font-size:9px;letter-spacing:1.2px;color:var(--muted)}.tag{font-size:9px;border:1px solid #4c3548;color:#d4c0d0;background:#291a28;padding:5px 8px;border-radius:99px;white-space:nowrap}.muted{color:var(--muted)}.field-label{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:10px;color:#c4b0bf;margin-bottom:7px}.field{width:100%;border:1px solid #493044;background:#100b11;border-radius:12px;color:#fff;padding:12px;font-weight:800;font-size:15px;outline:none;min-width:0}.field:focus{border-color:var(--red);box-shadow:0 0 0 3px #ff426418}.stake-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.presets{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:8px}.preset,.sub-btn{background:#2a1a28;border:1px solid #4a3044;color:#e9dbe7;border-radius:10px;padding:9px 4px;font-size:11px;font-weight:800}.preset:active,.sub-btn:active{transform:scale(.97)}.main-btn{width:100%;border:0;border-radius:13px;padding:14px 12px;color:white;background:linear-gradient(100deg,#ff5c78,#d91847);font-weight:950;font-size:13px;letter-spacing:.3px;box-shadow:0 7px 22px #d7194830}.main-btn.green{color:#08271b;background:linear-gradient(100deg,#7af5b7,#39d38c);box-shadow:0 7px 22px #39d38c22}.main-btn.secondary{background:#35202f;box-shadow:none;border:1px solid #633448}.main-btn:active{transform:translateY(1px)}.two-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}.result-box{background:#100b11;border:1px solid #3c2738;border-radius:13px;padding:11px;display:flex;justify-content:space-between;gap:10px;align-items:center}.result-box strong{display:block;color:var(--gold);font-size:17px;margin-top:4px}.result-box small{font-size:9px;color:var(--muted)}.result-box .green-text{color:var(--green)}.rocket-stage{height:360px;position:relative;overflow:hidden;border-radius:18px;border:1px solid #472138;background:radial-gradient(ellipse at 42% 100%,#572035 0,transparent 53%),linear-gradient(180deg,#100e1d,#160c19 72%,#26101d)}.rocket-stage:before{content:"";position:absolute;inset:0;background-image:radial-gradient(1.5px 1.5px at 12% 20%,#fff 99%,transparent),radial-gradient(1px 1px at 30% 45%,#ffc9d7 99%,transparent),radial-gradient(1.5px 1.5px at 78% 16%,#fff 99%,transparent),radial-gradient(1px 1px at 66% 34%,#fff 99%,transparent),radial-gradient(1px 1px at 89% 58%,#fff 99%,transparent),radial-gradient(1px 1px at 44% 13%,#fff 99%,transparent),radial-gradient(1px 1px at 20% 70%,#fff 99%,transparent);opacity:.8}.stage-top{position:absolute;z-index:5;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:center}.stage-label{font-size:9px;color:#d0b5c7;letter-spacing:1.3px}.sound{font-size:10px;border:1px solid #654052;background:#2b1826;color:#ffd9e2;border-radius:9px;padding:7px 8px}.multiplier{position:absolute;z-index:4;left:0;right:0;top:50px;text-align:center;font-size:clamp(39px,11vw,57px);font-weight:1000;letter-spacing:-2px;text-shadow:0 0 28px #ff385d5c;font-variant-numeric:tabular-nums}.stage-status{position:absolute;z-index:4;top:111px;left:0;right:0;text-align:center;font-size:11px;color:#d7c0d0}.countdown{position:absolute;z-index:5;left:50%;top:58%;transform:translate(-50%,-50%);font-size:24px;font-weight:1000;display:none;text-shadow:0 0 24px #ff436b}.rocket-stage.waiting .countdown{display:block}.rocket-stage.crashed{background:radial-gradient(ellipse at 60% 55%,#8e203b 0,transparent 55%),linear-gradient(#100e1d,#1e101b)}.rocket-unit{position:absolute;z-index:3;left:50%;bottom:19px;width:108px;height:158px;transform:translateX(-50%) rotate(-10deg);transform-origin:50% 50%;will-change:left,bottom,transform;filter:drop-shadow(0 5px 12px #ff3d5e75)}.rocket-unit svg{width:100%;height:100%;overflow:visible}.rocket-unit .flame-shape{transform-origin:50% 7%;animation:flame .1s infinite alternate}.rocket-unit .smoke-trail{opacity:0}.rocket-stage.flying .rocket-unit .smoke-trail{opacity:.75;animation:smoke .45s infinite}.rocket-stage.waiting .rocket-unit .flame-shape{transform:scale(.45);opacity:.65}.rocket-stage.flying .rocket-unit .flame-shape{animation:flame .065s infinite alternate}.rocket-stage.won .multiplier{color:var(--green);text-shadow:0 0 24px #45e69a66}.explosion{position:absolute;z-index:7;width:20px;height:20px;left:50%;top:55%;border-radius:50%;opacity:0;pointer-events:none;background:radial-gradient(circle,#fff 0 6%,#fff1a5 12% 22%,#ffae27 34%,#ff482f 56%,#b5194a 72%,transparent 74%);filter:drop-shadow(0 0 25px #ff5b24)}.rocket-stage.boom .explosion{animation:boom .8s ease-out forwards}.rocket-stage.boom:after{content:"";position:absolute;z-index:6;inset:0;background:#fff0cf;pointer-events:none;animation:flash .25s ease-out forwards}.rocket-stage.boom .rocket-unit{opacity:0}.rocket-track{position:absolute;z-index:1;left:8%;right:8%;bottom:28px;height:1px;background:linear-gradient(90deg,transparent,#ff506c99,transparent)}@keyframes flame{from{transform:scaleY(.65) scaleX(.85)}to{transform:scaleY(1.25) scaleX(1.12)}}@keyframes smoke{0%{transform:translateY(0) scale(.7);opacity:.6}100%{transform:translateY(52px) scale(1.4);opacity:0}}@keyframes boom{0%{opacity:1;transform:translate(-50%,-50%) scale(.1)}35%{opacity:1;transform:translate(-50%,-50%) scale(9)}100%{opacity:0;transform:translate(-50%,-50%) scale(15)}}@keyframes flash{0%{opacity:.75}100%{opacity:0}}.history-chips{display:flex;gap:6px;overflow:auto;padding:1px 0 4px}.history-chip{flex:0 0 auto;border:1px solid #3d2a3a;background:#20151f;color:#ddd0dc;border-radius:9px;padding:8px 9px;font-size:10px;font-weight:800}.history-chip.good{border-color:#286344;color:#8ff0bb;background:#10251c}.history-chip.bad{border-color:#6e2a42;color:#ff8fa3;background:#2a131e}.player-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.player{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:9px;background:#120c13;border:1px solid #382538;border-radius:10px;font-size:10px}.player strong{color:var(--gold);white-space:nowrap}.fine{font-size:9px;line-height:1.5;color:#9c8799}.plinko-board{display:flex;flex-direction:column;align-items:center;gap:6px;padding:13px 2px 2px;overflow:hidden}.peg-row{display:flex;justify-content:center;gap:clamp(5px,2.5vw,13px);width:100%}.peg{width:6px;height:6px;border-radius:50%;background:#f7b7cb;box-shadow:0 0 6px #ff7b9c77;flex:0 0 auto}.slots{display:flex;gap:3px;width:100%;margin-top:7px}.slot{flex:1;min-width:0;text-align:center;padding:7px 0;border-radius:7px 7px 4px 4px;background:#351927;border:1px solid #71324a;color:#ffc1d0;font-size:clamp(7px,2.1vw,10px);font-weight:900}.slot.hit{background:#ffca6e;color:#281321;box-shadow:0 0 20px #ffca6e77}.ball{position:absolute;width:17px;height:17px;border-radius:50%;background:radial-gradient(circle at 28% 22%,#fff 0 7%,#ffdce7 12%,#ff779d 31%,#e51c54 64%,#74102f 100%);border:1px solid #ffd7e2;box-shadow:inset -3px -4px 5px #690b2d99,0 0 12px #ff3e6c,0 0 3px #fff;z-index:5;transition:left .12s cubic-bezier(.3,.8,.4,1),top .12s cubic-bezier(.3,.8,.4,1);pointer-events:none}.plinko-wrap{position:relative;overflow:hidden;padding:0 3px 5px}.peg{width:7px;height:7px;background:radial-gradient(circle at 30% 25%,#fff,#ffc1d6 35%,#e64b7c 80%);box-shadow:0 0 8px #ff7b9c99,0 1px 2px #000}.screen{animation:screenIn .2s ease-out}@keyframes screenIn{from{opacity:.65;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}.tap-orb{width:min(62vw,230px);aspect-ratio:1;border-radius:50%;border:1px solid #ff8da3;background:radial-gradient(circle at 34% 25%,#ffb3c2 0,#fa4e77 17%,#9e143d 47%,#3b1025 72%,#170d17 100%);box-shadow:inset 0 0 28px #fff3,0 0 0 9px #ff41651a,0 0 45px #ff1e5540;display:grid;place-items:center;margin:22px auto;color:white;font-size:70px;user-select:none;touch-action:manipulation;transition:transform .08s;position:relative}.tap-orb:active{transform:scale(.94)}.tap-orb:after{content:"LG";position:absolute;bottom:24%;font-size:14px;letter-spacing:3px;font-weight:1000}.tap-count{font-size:25px;font-weight:1000;color:var(--gold);text-align:center}.upgrade-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #382536}.upgrade-row:last-child{border-bottom:0}.upgrade-icon{width:43px;height:43px;flex:0 0 43px;border-radius:13px;display:grid;place-items:center;background:#3a1b2b;font-size:23px}.upgrade-copy{flex:1;min-width:0}.upgrade-copy b{display:block;font-size:12px}.upgrade-copy small{display:block;color:var(--muted);font-size:10px;line-height:1.4;margin-top:3px}.upgrade-buy{border:1px solid #7d314b;border-radius:11px;background:#421a2c;color:#ffdbe3;padding:9px 10px;font-weight:900;font-size:10px;white-space:nowrap}.rocket-owner-strip{display:flex;gap:8px;align-items:center;justify-content:center;margin:0 auto 7px;color:#ffcfda;font-size:10px}.rocket-owner-strip b{font-size:12px;color:var(--gold)}.mines-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.mine-cell{aspect-ratio:1/1;border:1px solid #533248;border-radius:12px;background:linear-gradient(145deg,#3a2035,#231522);font-size:clamp(19px,6vw,27px);font-weight:900;color:white;box-shadow:inset 0 1px #ffffff0b;transition:transform .12s,border-color .12s}.mine-cell:not(:disabled):active{transform:scale(.94)}.mine-cell.safe{background:linear-gradient(145deg,#15533b,#103323);border-color:#2e9c6b}.mine-cell.mine{background:linear-gradient(145deg,#77223c,#3b1427);border-color:#e74468;animation:reveal .25s}.mine-cell:disabled{opacity:1}.ladder{display:flex;flex-direction:column-reverse;gap:7px}.ladder-choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:11px}.ladder-tile{min-height:54px;border:1px solid #67405a;border-radius:12px;background:linear-gradient(145deg,#42213a,#251525);color:#fff;font-size:21px;font-weight:900;box-shadow:inset 0 1px #ffffff0b}.ladder-tile:active{transform:scale(.96)}.ladder-tile.safe{background:linear-gradient(145deg,#15533b,#103323);border-color:#2e9c6b}.ladder-tile.wrong{background:linear-gradient(145deg,#77223c,#3b1427);border-color:#e74468}.ladder-step{display:flex;align-items:center;gap:8px;border:1px solid #3e293b;border-radius:11px;padding:9px;background:#130d14}.ladder-step.current{border-color:#ff6780;background:#351724}.ladder-step.done{border-color:#276e4d;background:#10291e}.step-num{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:#302030;font-size:10px;font-weight:900}.step-label{flex:1;font-size:11px}.step-x{font-size:12px;font-weight:900;color:var(--gold)}.nav{position:fixed;z-index:20;left:50%;transform:translateX(-50%);bottom:0;width:min(100%,600px);padding:8px 9px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,1fr);gap:5px;border:1px solid #3c2537;border-bottom:0;border-radius:18px 18px 0 0;background:#160e18f2;backdrop-filter:blur(16px)}.nav-btn{border:0;background:transparent;color:#a994a6;padding:7px 2px 5px;border-radius:10px;font-size:9px;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:4px}.nav-btn span{font-size:19px}.nav-btn.active{color:#ff8199;background:#3a1728}.screen{display:none}.screen.active{display:block}.toast{position:fixed;z-index:50;bottom:calc(82px + env(safe-area-inset-bottom));left:50%;transform:translate(-50%,12px);opacity:0;pointer-events:none;max-width:90%;text-align:center;background:#2d1b2b;border:1px solid #74405a;border-radius:12px;padding:11px 15px;font-size:12px;transition:.2s;box-shadow:0 8px 28px #0007}.toast.show{opacity:1;transform:translate(-50%,0)}.profile-card{display:flex;align-items:center;gap:12px}.avatar{width:53px;height:53px;display:grid;place-items:center;border-radius:17px;background:linear-gradient(145deg,#ff647e,#a80d35);font-size:25px;font-weight:1000}.profile-card h3{margin:0;font-size:16px}.profile-card p{margin:4px 0 0;font-size:10px;color:var(--muted)}.owner-box{border:1px solid #71542d;background:#2b2015;border-radius:13px;padding:12px}.owner-box b{color:var(--gold)}.owner-row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px;font-size:11px}.switch{width:40px;height:24px;border-radius:99px;background:#4a3447;border:0;padding:3px}.switch:after{content:"";display:block;width:18px;height:18px;border-radius:50%;background:#fff;transition:.15s}.switch.on{background:#c72a50}.switch.on:after{transform:translateX(16px)}.empty{font-size:11px;color:var(--muted);text-align:center;padding:15px 5px}.divider{height:1px;background:#3b2838;margin:12px 0}.section-intro{font-size:11px;line-height:1.6;color:#c5b2c2;margin:0 2px 10px}.badge{display:inline-block;font-size:9px;color:#a5f4c6;border:1px solid #2d6348;background:#10291e;padding:5px 8px;border-radius:99px}.hidden{display:none!important}@keyframes reveal{0%{transform:scale(.86)}100%{transform:scale(1)}}@media(min-width:500px){.app{padding-left:20px;padding-right:20px}.hero h1{font-size:29px}.rocket-stage{height:330px}.rocket-unit{width:102px;height:151px}}
+/* Added functional clicker layout; the original page background and coin styling above are preserved. */
+.row b,.stat b{font-variant-numeric:tabular-nums}.meter span{transition:width .2s ease}.price:disabled{opacity:.45;cursor:not-allowed}.field{width:100%;background:#100b14;color:#ffe0e6;border:1px solid #543348;border-radius:11px;padding:12px;font:inherit;outline:none}.field:focus{border-color:#ff8198}.setting-line{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #352333}.setting-line:last-child{border-bottom:0}.setting-line .setting-copy{flex:1;min-width:0}.setting-line b{display:block;font-size:11px}.setting-line small{display:block;color:#a991a4;font-size:9px;margin-top:4px;line-height:1.45}.achievement{display:flex;align-items:center;gap:11px;padding:13px 0;border-bottom:1px solid #352333}.achievement:last-child{border-bottom:0}.ach-icon{width:40px;height:40px;display:grid;place-items:center;flex:none;border:1px solid #573047;background:linear-gradient(145deg,#3a1b2b,#211523);border-radius:13px;font-size:19px}.ach-main{flex:1;min-width:0}.ach-main b{font-size:11px;display:block}.ach-main small{font-size:9px;color:#a991a4;line-height:1.5;display:block;margin-top:4px}.ach-progress{height:4px;background:#30202f;border-radius:99px;margin-top:7px;overflow:hidden}.ach-progress span{display:block;height:100%;background:linear-gradient(90deg,#a8173e,#ff8299)}.status{font-size:8px;color:#83e7b1;border:1px solid #286448;background:#10281f;border-radius:99px;padding:5px 7px;white-space:nowrap}.switch{appearance:none;width:34px;height:20px;border-radius:99px;background:#3a2938;border:1px solid #67404d;position:relative;cursor:pointer;flex:none}.switch:checked{background:#8c1638}.switch:before{content:"";position:absolute;width:14px;height:14px;left:2px;top:2px;border-radius:50%;background:#fff;transition:transform .15s}.switch:checked:before{transform:translateX(14px)}.mini{font-size:9px;color:#a991a4}.number{font-variant-numeric:tabular-nums}@media(max-width:370px){.nav button{font-size:8px;gap:3px;padding-left:1px;padding-right:1px}.nav .ico{font-size:13px}.app{padding-left:11px;padding-right:11px}.balance{padding:8px;font-size:10px}}
 
-/* Lookgrader circle and three-tab navigation */
-#screen-games{display:none!important}
-.target-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.target-card{border:1px solid #34415a;border-radius:14px;min-height:62px;padding:10px 5px;background:linear-gradient(145deg,#202a40,#111827);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
-.target-card b{font-size:18px}.target-card span{font-size:10px;color:#aab8d0}
-.target-card.selected{border-color:#ff6688;background:linear-gradient(145deg,#43253c,#1b1a2a);box-shadow:0 0 0 1px #ff668822,0 0 18px #ff456b14}
-.target-card.rare b{color:#ffe09a}
-.spin-wheel-wrap{width:min(78vw,292px);aspect-ratio:1;margin:15px auto 18px;position:relative;display:grid;place-items:center;filter:drop-shadow(0 12px 18px #0005)}
-.spin-wheel{position:absolute;inset:0;border-radius:50%;border:9px solid #303c56;background:conic-gradient(from -117deg,#ff4168 0deg 234deg,#ffb34e 234deg 235.2deg,#202d44 235.2deg 360deg);box-shadow:0 0 0 1px #65779c,0 0 0 6px #121827,0 18px 35px #0009,inset 0 0 0 5px #0c101a,inset 0 0 30px #0007}
-.spin-wheel:before{content:'SUCCESS ZONE';position:absolute;top:9%;left:50%;transform:translateX(-50%);font-size:7px;letter-spacing:1.2px;font-weight:950;color:#fff4fa;white-space:nowrap}
-.wheel-inner{position:absolute;inset:29%;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;background:radial-gradient(circle at 30% 22%,#4c5877,#171d2d 72%);border:1px solid #8392b5;box-shadow:inset 0 0 18px #0009,0 0 18px #8174c322}
-.wheel-star{font-size:30px;font-weight:1000;color:#ff6b8a;text-shadow:0 0 18px #ff315f88}.wheel-inner small{font-size:7px;letter-spacing:1.5px;color:#cdb5c8}
-.wheel-pointer{position:absolute;z-index:3;width:47%;height:47%;left:50%;top:50%;transform:translate(-50%,-50%) rotate(0deg);transform-origin:50% 50%;pointer-events:none;will-change:transform}
-.wheel-pointer span{position:absolute;left:50%;top:-8px;transform:translateX(-50%);font-size:29px;color:#fff4c7;text-shadow:0 0 12px #ff456b,0 2px 5px #000;filter:drop-shadow(0 0 5px #ff4c68)}
-.wheel-hub{position:absolute;z-index:4;width:15px;height:15px;border-radius:50%;background:#fff2be;border:3px solid #ff6785;box-shadow:0 0 17px #ff526f}
-.spin-result{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;background:linear-gradient(145deg,#0d1420,#161d2c);border:1px solid #303e58;border-radius:14px;padding:13px;margin:0 0 15px}
-.spin-result strong{font-size:17px;color:#fff}.spin-result small{font-size:10px;color:var(--muted)}.spin-result.success strong{color:var(--green)}.spin-result.fail strong{color:#ff6c83}.spin-wheel.spinning{filter:brightness(1.16) saturate(1.15)}
-
-
-/* Compact wallet layout */
-.wallet-compact,.wallet-history-compact{padding:10px 12px;margin-top:8px;border-radius:14px}
-.wallet-compact .panel-title,.wallet-history-compact .panel-title{margin-bottom:7px}
-.wallet-balance-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#100b11;border:1px solid #3c2738;border-radius:11px;padding:8px 10px}
-.wallet-balance-row small{display:block;font-size:8px;color:var(--muted);letter-spacing:.4px}
-.wallet-balance-row strong{display:block;color:var(--gold);font-size:16px;margin-top:2px}
-.wallet-type{font-size:9px;color:#d4c0d0;border:1px solid #4c3548;background:#291a28;padding:5px 7px;border-radius:8px}
-.wallet-history-compact .empty{padding:5px 3px;font-size:10px}
-.wallet-history-compact .owner-row{margin-top:6px;font-size:10px}
-.wallet-history-compact .divider{margin:7px 0}
-
-/* LOOKGRAM RED MOTION BACKGROUND v1 */
-body {
-  background-color: #0b080e;
-  background-image:
-    radial-gradient(ellipse at 50% 0%, #39101f 0%, transparent 48%),
-    radial-gradient(ellipse at 100% 55%, #260b19 0%, transparent 45%);
-  background-attachment: fixed;
-}
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  inset: -45%;
-  pointer-events: none;
-  z-index: 0;
-  will-change: transform, background-position;
-}
-body::before {
-  opacity: .29;
-  background:
-    linear-gradient(112deg, transparent 0 17%, #ff234018 17.1%, transparent 17.35% 39%, #ff34552c 39.1%, transparent 39.3% 68%, #ff24451b 68.1%, transparent 68.35%),
-    repeating-linear-gradient(112deg, transparent 0 115px, #ff29452a 116px, #ff294500 118px, transparent 205px);
-  animation: lgRedDrift 34s linear infinite;
-}
-body::after {
-  opacity: .20;
-  background:
-    linear-gradient(112deg, transparent 0 28%, #ff31551f 28.1%, transparent 28.3% 73%, #ff31552b 73.1%, transparent 73.3%),
-    repeating-linear-gradient(112deg, transparent 0 173px, #ff3d602b 174px, transparent 176px 290px);
-  animation: lgRedDrift 49s linear infinite reverse;
-}
-.app { position: relative; z-index: 1; }
-.nav { z-index: 20; }
-.toast { z-index: 50; }
-@keyframes lgRedDrift {
-  0%   { transform: translate3d(-2%, -1%, 0) rotate(0deg); background-position: 0 0, 0 0; }
-  50%  { transform: translate3d(2%, 1%, 0) rotate(1deg); background-position: 100px 60px, -140px 100px; }
-  100% { transform: translate3d(-2%, -1%, 0) rotate(0deg); background-position: 200px 120px, -280px 200px; }
-}
-/* Smaller, more physical-looking Lookgram coin */
-.tap-orb {
-  width: min(48vw, 174px);
-  aspect-ratio: 1;
-  margin: 19px auto;
-  padding: 0;
-  font-size: 0;
-  border: 2px solid #e8a3ad;
-  background:
-    radial-gradient(circle at 29% 19%, #fff5e9 0%, #f6c5bc 5%, transparent 17%),
-    radial-gradient(circle at 35% 28%, #f4b1a9 0%, #b94452 30%, #6f1c35 64%, #240e1b 100%);
-  box-shadow:
-    inset 0 0 0 4px #f5c0c522,
-    inset 0 0 0 8px #270d1d88,
-    inset -9px -12px 18px #130711b8,
-    0 0 0 3px #ff4b6818,
-    0 9px 28px #0008,
-    0 0 24px #ff31551e;
-  animation: lgCoinFloat 4.5s ease-in-out infinite;
-}
-.tap-orb::before {
-  content: "";
-  position: absolute;
-  inset: 10%;
-  border: 1px solid #ffd0d055;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 2px #ffffff0a;
-  pointer-events: none;
-}
-.tap-orb::after { content: ""; }
-.coin-face {
-  position: relative;
-  width: 69%;
-  aspect-ratio: 1;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  color: #541326;
-  font: 900 46px/1 Georgia, serif;
-  text-shadow: 0 1px #ffe1d6, 0 -1px #64192d;
-  border: 2px solid #f5c2b7;
-  background: linear-gradient(145deg, #f4c8b9 0%, #d77a79 28%, #a83a51 65%, #692039 100%);
-  box-shadow: inset 2px 3px 5px #fff6, inset -4px -6px 9px #3b0c2380, 0 2px 4px #0008;
-}
-.coin-face::after {
-  content: "LG";
-  position: absolute;
-  bottom: 9%;
-  font: 900 8px/1 Arial, sans-serif;
-  letter-spacing: 2px;
-  color: #ffe0d7;
-  text-shadow: 0 1px 2px #4a1024;
-}
-.tap-orb:active {
-  transform: scale(.94);
-  animation: none;
-}
-.tap-count {
-  text-shadow: 0 0 16px #ff31553d;
-  animation: lgCountGlow 3s ease-in-out infinite;
-}
-@keyframes lgCoinFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-}
-@keyframes lgCountGlow {
-  0%, 100% { text-shadow: 0 0 8px #ff31551c; }
-  50% { text-shadow: 0 0 18px #ff31555c; }
-}
-@media (prefers-reduced-motion: reduce) {
-  body::before, body::after, .tap-orb, .tap-count {
-    animation: none !important;
-  }
-}
+.reward-card{position:relative;overflow:hidden;border:1px solid #513044;border-radius:16px;padding:13px;background:linear-gradient(140deg,#271523,#17101c 72%);margin-bottom:10px}.reward-card.unlocked{border-color:#814056;box-shadow:inset 0 1px #ffffff08}.reward-head{display:flex;align-items:center;gap:11px}.reward-symbol{width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,#4b1c32,#241322);border:1px solid #754058;font-size:21px;box-shadow:0 0 18px #ff315510}.reward-info{flex:1;min-width:0}.reward-info b{display:block;font-size:12px}.reward-info small{display:block;margin-top:4px;color:#b8a5b5;font-size:10px;line-height:1.45}.reward-action{margin-top:11px;width:100%;border:1px solid #754056;border-radius:11px;padding:10px;background:linear-gradient(110deg,#b91d46,#64152f);color:#fff;font-size:10px;font-weight:900;cursor:pointer}.reward-action:disabled{opacity:.45;filter:saturate(.5);cursor:default}.profile-hero{position:relative;overflow:hidden;border:1px solid #663247;border-radius:22px;padding:19px;background:linear-gradient(140deg,#351526,#17101d 65%,#27101c);box-shadow:0 14px 30px #0004}.profile-hero:after{content:'L';position:absolute;right:12px;top:-22px;font-size:130px;line-height:1;font-weight:1000;color:#ff41680b;pointer-events:none}.profile-top{position:relative;z-index:1;display:flex;align-items:center;gap:13px}.profile-avatar{width:68px;height:68px;flex:none;display:grid;place-items:center;border-radius:22px;background:linear-gradient(145deg,#ff8299,#9c1740 62%,#3b1029);border:1px solid #ffb2c0;box-shadow:0 0 24px #ff31552c,inset 0 1px #fff7;font-size:36px;font-weight:1000;color:#fff}.profile-name{font-size:19px;font-weight:950;letter-spacing:-.4px}.profile-handle{font-size:10px;color:#bca7b9;margin-top:4px}.title-chip{display:inline-flex;align-items:center;gap:5px;margin-top:8px;border:1px solid #7a3d55;background:#3a192b;color:#ffb5c4;border-radius:99px;padding:6px 9px;font-size:9px;font-weight:850}.level-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:19px;font-size:10px;color:#c7b0c1}.level-row b{color:#ffe0e7}.xp-meter{height:8px;margin-top:8px;border-radius:99px;background:#382332;overflow:hidden;border:1px solid #4a2a3d}.xp-meter span{display:block;width:0;height:100%;border-radius:99px;background:linear-gradient(90deg,#a71940,#ff7791,#ffd0d8);box-shadow:0 0 13px #ff416866;transition:width .35s ease}.profile-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:11px}.metric-tile{border:1px solid #42283c;border-radius:15px;padding:13px;background:linear-gradient(145deg,#201321,#140e18)}.metric-tile small{display:block;color:#ae97aa;font-size:9px}.metric-tile b{display:block;color:#ffe1e7;font-size:17px;margin-top:6px;overflow-wrap:anywhere}.metric-tile em{display:block;color:#a991a4;font-style:normal;font-size:9px;margin-top:3px}.section-label{font-size:10px;color:#ff9eb1;font-weight:900;letter-spacing:1.4px;margin:16px 2px 8px}
+.reward-menu{display:flex;flex-direction:column;gap:10px}.reward-menu-btn{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:15px;border-radius:15px;border:1px solid #573047;background:linear-gradient(145deg,#2b1728,#18101c);color:#fff;cursor:pointer}.reward-menu-icon{display:grid;place-items:center;flex:none;width:45px;height:45px;border-radius:13px;background:linear-gradient(145deg,#482038,#251425);border:1px solid #684057;font-size:23px}.reward-menu-btn span:nth-child(2){flex:1;min-width:0}.reward-menu-btn b{display:block;font-size:13px}.reward-menu-btn small{display:block;margin-top:4px;color:#bda7b8;font-size:10px}.reward-menu-btn strong{font-size:18px;color:#ff9cb1}
+/* Hidden OG legacy interface */
+#legacyMode{display:none;position:relative;z-index:2;max-width:560px;min-height:100vh;margin:0 auto;padding:14px 15px calc(95px + env(safe-area-inset-bottom));}
+body.legacy-active .app,body.legacy-active .nav{display:none!important}body.legacy-active #legacyMode{display:block}body.legacy-active #legacyTabs{display:grid}
+.legacy-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 2px 18px}
+.legacy-brand{display:flex;align-items:center;gap:10px;font-weight:950;letter-spacing:1.6px;font-size:15px}
+.legacy-mark{width:39px;height:39px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#ff6c87,#8e1236);border:1px solid #ff9aac;font-size:23px}
+.legacy-tabs{display:none;position:fixed;z-index:20;left:50%;transform:translateX(-50%);bottom:0;width:min(100%,560px);grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:#160e18f2;border:1px solid #3c2537;border-bottom:0;border-radius:19px 19px 0 0;backdrop-filter:blur(18px)}
+.legacy-tabs button{border:1px solid transparent;border-radius:12px;min-height:48px;background:transparent;color:#bda7b8;font-size:12px;font-weight:900;cursor:pointer}.legacy-tabs button.active{color:#ff9bb0;background:#3a1728;border-color:#633047}
+.legacy-screen{display:none;animation:enter .22s ease-out}.legacy-screen.active{display:block}
+.og-secret{position:relative;float:right;margin:-6px -5px 0 0;width:22px;height:22px;padding:0;border:1px solid #593247;border-radius:7px;background:#1b111b;color:#7d566c;font-size:8px;font-weight:950;opacity:.32;cursor:pointer}.og-secret:focus,.og-secret:hover{opacity:1;color:#ff9db0}
+/* OG mode uses the actual original GitHub mini-app look, with the original gold L coin. */
+#legacyMode{background:radial-gradient(circle at 50% 40%,#4b1723,#160b12 75%);color:#fff;font-family:Arial,sans-serif;padding:0 0 calc(90px + env(safe-area-inset-bottom));}
+#legacyMode .legacy-old-app{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:25px 18px 22px;}
+#legacyMode .legacy-header{width:100%;max-width:420px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0;margin:0;}
+#legacyMode .legacy-brand{font-size:25px;font-weight:900;letter-spacing:2px;color:#fff;margin-top:12px;display:block;}
+#legacyMode .legacy-subtitle{color:#d8aeb8;font-size:13px;margin-top:7px;}
+#legacyMode .legacy-header .balance{display:none}
+#legacyMode .legacy-balance{width:100%;max-width:420px;text-align:center;margin-top:22px;padding:14px;background:#ffffff0d;border:1px solid #ffffff18;border-radius:17px;color:#fff;font-size:12px;font-weight:400;white-space:normal}
+#legacyMode .legacy-balance .label{font-size:12px;color:#cdaeb6}
+#legacyMode .legacy-balance .value{font-size:27px;color:#ffcf58;font-weight:700;margin-top:7px}
+#legacyMode .legacy-balance .click-count{font-size:12px;opacity:.65;margin-top:4px}
+#legacyMode .legacy-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:420px;margin-top:30px}
+#legacyMode .legacy-stat{background:#ffffff0d;border:1px solid #ffffff18;border-radius:17px;padding:15px 8px;text-align:center;min-width:0}
+#legacyMode .legacy-label{font-size:12px;color:#cdaeb6}
+#legacyMode .legacy-value{font-size:22px;font-weight:bold;margin-top:7px;color:#fff}
+#legacyMode .legacy-progress{height:8px;background:#5a341b;border-radius:99px;overflow:hidden;margin-top:8px}
+#legacyMode .legacy-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffcf58,#ff8c27)}
+#legacyMode .legacy-coin-area{position:relative;display:grid;place-items:center;flex:1;width:100%;min-height:280px;padding:12px 0}
+#legacyMode .og-old-coin{width:min(65vw,250px);aspect-ratio:1;border-radius:50%;border:5px solid #ffdc78;background:radial-gradient(circle at 35% 25%,#fff3a3,#ffbd35 45%,#d87512 80%);box-shadow:0 0 35px #ffb52d66,inset 0 0 0 8px #ffdf7655,inset 0 -12px 20px #a94c15;color:#79360c;font-size:100px;font-weight:900;display:grid;place-items:center;pointer-events:none;user-select:none;filter:none;position:relative;}
+#legacyMode .og-old-coin:before{content:"";position:absolute;inset:9px;border-radius:50%;border:2px solid #9e6b2a;box-shadow:inset 0 0 0 4px #ffdf7655;opacity:.72}
+#legacyMode .og-old-coin .coin-face{position:relative;width:auto;aspect-ratio:auto;border:0;border-radius:0;background:none;box-shadow:none;color:#79360c;text-shadow:1px 2px #ffe58a,-1px -1px #a75b13;font:900 100px/1 Georgia,serif;display:grid;place-items:center}
+#legacyMode .og-old-coin .coin-face:after{content:none}
+#legacyMode .legacy-hint{color:#cdaeb6;font-size:13px;margin:0 0 22px;text-align:center}
+#legacyMode .legacy-transfer{pointer-events:none;width:100%;max-width:380px;border:0;border-radius:16px;padding:17px;background:linear-gradient(90deg,#ffcf58,#ff9e31);color:#411c08;font-size:16px;font-weight:900;text-align:center;opacity:.78}
+#legacyMode .legacy-screen{display:none;width:100%}
+#legacyMode .legacy-screen.active{display:block}
+#legacyMode .legacy-screen#legacy-clicker.active{display:flex;flex-direction:column;align-items:center;flex:1;width:100%;}
+#legacyMode .legacy-settings-title{width:100%;max-width:420px;color:#fff;font-size:23px;font-weight:900;margin:32px 0 20px}
+#legacyMode .legacy-return-wrap{width:100%;max-width:380px;margin-top:12px}
+#legacyMode .legacy-return-wrap .btn{font-family:Arial,sans-serif;font-size:15px;padding:16px;background:linear-gradient(90deg,#ffcf58,#ff9e31);color:#411c08;border:0;box-shadow:none}
+#legacyTabs{background:#201017f2;border-color:#704124}
+#legacyTabs button{color:#cdaeb6}
+#legacyTabs button.active{color:#ffcf58;background:#45261b;border-color:#a16b32}
 
 
-/* LOOKGRAM CINEMATIC FX v2 */
+/* Hidden "За гранью" Easter egg: a deliberately broken-looking fake source panel. */
+.beyond-zone{position:relative;margin-top:24px;padding:22px 12px 26px;border:1px dashed #87334b;border-radius:17px;overflow:hidden;background:linear-gradient(135deg,#130b12,#190b15 55%,#0b0a10);box-shadow:inset 0 0 35px #ff174014,0 0 25px #0008;color:#f4c7d2}
+.beyond-zone:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 4px,#ff426808 5px 6px);opacity:.8}
+.beyond-zone .beyond-head{position:relative;display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;font:900 10px/1.4 ui-monospace,monospace;letter-spacing:2px;color:#ff557b}
+.beyond-zone .beyond-status{font-size:8px;letter-spacing:1px;color:#ff9db2;border:1px solid #773148;padding:4px 6px;border-radius:5px;transform:rotate(-2deg)}
+.beyond-zone .broken-window{position:relative;border:1px solid #5b263c;background:#09080d;padding:12px 9px;margin:10px 0;transform:rotate(-.5deg);box-shadow:5px 4px 0 #5b1830aa}
+.beyond-zone .broken-window:nth-of-type(2){transform:translateX(5px) rotate(.8deg);width:96%}
+.beyond-zone .broken-title{font:800 10px ui-monospace,monospace;color:#f5a0b7;margin-bottom:9px;display:flex;justify-content:space-between}
+.beyond-zone .code-lines{font:9px/1.9 ui-monospace,SFMono-Regular,monospace;color:#a9a1ad;overflow-wrap:anywhere}
+.beyond-zone .code-lines .ln{display:inline-block;width:20px;color:#694758;user-select:none}
+.beyond-zone .code-lines .pink{color:#ff6e99}.beyond-zone .code-lines .green{color:#9bd9a9}.beyond-zone .code-lines .yellow{color:#f1d184}.beyond-zone .code-lines .red{color:#ff4d64;text-shadow:0 0 8px #ff2348}
+.beyond-zone .glitch-label{font:950 20px/1.1 ui-monospace,monospace;letter-spacing:3px;color:#ff466b;text-shadow:2px 0 #61f6ed,-2px 0 #8d2855;animation:beyondGlitch 2.7s steps(1) infinite;margin:12px 0 8px}
+/* Long descent: the rift is centered between the clicker and the broken menu. */
+.descent-gap{height:4200px;pointer-events:none}
+.rift-after-gap{height:4200px;pointer-events:none}
+/* A full-width tear cut into the page: no image/card overlay. The edge layers use the same ambient colors as the page. */
+.vacuum-rift.vacuum-between{position:relative;left:50%;width:100vw;max-width:100vw;transform:translateX(-50%);height:1000px;margin:0;overflow:hidden;isolation:isolate;background:transparent;}
+ .rift-stars{position:absolute;inset:0;z-index:1;background-color:#05040b;background-image:radial-gradient(ellipse at 50% 50%,#020106 0%,#05040b 42%,#0b080e 76%,#0b080e 100%),radial-gradient(ellipse at 50% 48%,#020106 0%,#020106 24%,transparent 72%),radial-gradient(1px 1px at 3% 21%,#fff 98%,transparent),radial-gradient(1px 1px at 8% 74%,#d9e4ff 98%,transparent),radial-gradient(2px 2px at 15% 39%,#fff 98%,transparent),radial-gradient(1px 1px at 21% 83%,#fff 98%,transparent),radial-gradient(1px 1px at 27% 18%,#d9d6ff 98%,transparent),radial-gradient(2px 2px at 34% 67%,#fff 98%,transparent),radial-gradient(1px 1px at 40% 31%,#fff 98%,transparent),radial-gradient(1px 1px at 47% 77%,#d5d8ff 98%,transparent),radial-gradient(2px 2px at 54% 16%,#fff 98%,transparent),radial-gradient(1px 1px at 60% 59%,#fff 98%,transparent),radial-gradient(1px 1px at 67% 34%,#d8d5ff 98%,transparent),radial-gradient(2px 2px at 73% 79%,#fff 98%,transparent),radial-gradient(1px 1px at 80% 23%,#fff 98%,transparent),radial-gradient(1px 1px at 87% 63%,#fff 98%,transparent),radial-gradient(2px 2px at 94% 29%,#d9d6ff 98%,transparent),radial-gradient(1px 1px at 98% 88%,#fff 98%,transparent),radial-gradient(1px 1px at 37% 48%,#fff 98%,transparent),radial-gradient(1px 1px at 91% 49%,#d9d6ff 98%,transparent);background-size:100% 100%;filter:drop-shadow(0 0 18px #020106);mask-image:linear-gradient(to bottom,transparent 0%,#000 18%,#000 82%,transparent 100%);clip-path:polygon(0 29%,3% 28%,5% 25%,7% 29%,10% 27%,12% 31%,14% 28%,17% 30%,19% 24%,21% 29%,24% 28%,26% 33%,29% 27%,31% 28%,33% 23%,35% 29%,38% 27%,40% 31%,43% 28%,45% 25%,47% 29%,50% 27%,52% 31%,55% 28%,57% 22%,59% 28%,62% 30%,64% 26%,66% 29%,69% 25%,71% 30%,74% 27%,76% 32%,79% 28%,81% 24%,83% 29%,86% 27%,88% 31%,90% 28%,93% 25%,95% 29%,97% 27%,100% 30%,100% 71%,97% 74%,94% 70%,91% 73%,88% 68%,85% 72%,82% 70%,79% 76%,76% 71%,73% 73%,70% 69%,67% 74%,64% 71%,61% 77%,58% 71%,55% 73%,52% 69%,49% 74%,46% 71%,43% 76%,40% 71%,37% 73%,34% 69%,31% 74%,28% 71%,25% 77%,22% 70%,19% 73%,16% 69%,13% 74%,10% 71%,7% 76%,4% 71%,0 73%);}
+/* Crack overlays removed; the rift is left clean. */
+/* No orbiting rings, swirls, fake vortex, or floating confetti. */
+.rift-vortex,.rift-streams,.rift-rim,.rift-particles{display:none!important}
 
-/* LOOKGRAM CINEMATIC FX v2 */
-.lg-fx-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-  contain: strict;
-  isolation: isolate;
-  background:
-    radial-gradient(ellipse at 15% 28%, #9e12351a, transparent 34%),
-    radial-gradient(ellipse at 86% 72%, #d51c4214, transparent 37%);
-}
-.lg-fx-layer::before {
-  content: "";
-  position: absolute;
-  inset: -35%;
-  opacity: .42;
-  background:
-    radial-gradient(ellipse at 30% 35%, #ff20451c, transparent 20%),
-    radial-gradient(ellipse at 70% 65%, #ff17401c, transparent 24%),
-    linear-gradient(125deg, transparent 43%, #ff34550a 44%, #ff34551c 44.1%, transparent 44.6%);
-  animation: lgNebula 19s ease-in-out infinite alternate;
-}
-.lg-fx-layer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  background:
-    radial-gradient(ellipse at 18% 22%, #ff24454a, transparent 38%),
-    radial-gradient(ellipse at 83% 66%, #ff16302b, transparent 42%);
-  animation: lgFlash 13s ease-in-out infinite;
-}
-.lg-fx-streak {
-  position: absolute;
-  left: var(--x);
-  top: 115%;
-  width: var(--w);
-  height: var(--h);
-  opacity: 0;
-  border-radius: 99px;
-  transform: rotate(var(--r));
-  transform-origin: center;
-  background: linear-gradient(to top, transparent, #ff25451c 25%, #ff456b var(--bright), #ffd1d9 52%, #ff365b88 63%, transparent);
-  filter: drop-shadow(0 0 4px #ff31555e);
-  animation: lgStreak var(--dur) linear var(--delay) infinite;
-}
-.lg-fx-spark {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50%;
-  opacity: 0;
-  background: #ffd7df;
-  box-shadow: 0 0 5px 2px #ff496a99, 0 0 16px 3px #ff24455c;
-  animation: lgSpark var(--dur) ease-in-out var(--delay) infinite;
-}
-.lg-fx-spark::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: calc(var(--size) * 4);
-  height: 1px;
-  transform: translate(-50%, -50%);
-  background: linear-gradient(90deg, transparent, #ffb9c9, transparent);
-}
-@keyframes lgNebula {
-  0% { transform: translate3d(-3%, -2%, 0) rotate(-3deg) scale(1); }
-  100% { transform: translate3d(3%, 2%, 0) rotate(3deg) scale(1.08); }
-}
-@keyframes lgFlash {
-  0%, 8%, 17%, 100% { opacity: 0; }
-  10% { opacity: .34; }
-  12% { opacity: .06; }
-  14% { opacity: .22; }
-  16% { opacity: 0; }
-}
-@keyframes lgStreak {
-  0% { transform: translate3d(0, 0, 0) rotate(var(--r)); opacity: 0; }
-  5% { opacity: var(--opacity); }
-  70% { opacity: var(--opacity); }
-  100% { transform: translate3d(var(--drift), -145vh, 0) rotate(var(--r)); opacity: 0; }
-}
-@keyframes lgSpark {
-  0%, 100% { opacity: 0; transform: translate3d(0, 8px, 0) scale(.5); }
-  30% { opacity: var(--opacity); }
-  65% { opacity: calc(var(--opacity) * .55); transform: translate3d(var(--drift), -28px, 0) scale(1.25); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .lg-fx-layer::before, .lg-fx-layer::after,
-  .lg-fx-streak, .lg-fx-spark { animation: none !important; }
-}
+.descent-darkness{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 54%,transparent 0%,#02010455 34%,#000 100%),linear-gradient(180deg,#0000 0%,#000 100%);transition:opacity .12s linear}
+#leaderSecretButton{width:34px;height:30px;border:1px solid #593247;border-radius:9px;background:#241322;color:#d9a5b9;font-size:15px;cursor:pointer;flex:none}#leaderSecretButton:active{transform:scale(.94)}.secret-gate{display:none;margin-top:12px;border:1px solid #54304b;border-radius:14px;padding:13px;background:linear-gradient(145deg,#211421,#100c15)}.secret-gate.open{display:block;animation:enter .22s ease-out}.secret-code-row{display:flex;gap:8px;margin-top:10px}.secret-code-row input{width:100%;min-width:0;background:#0c0910;border:1px solid #593247;border-radius:10px;color:#fff;padding:12px;font:700 18px ui-monospace,monospace;letter-spacing:8px;text-align:center}.secret-result{display:none;margin-top:12px;border:1px solid #a64c70;border-radius:14px;padding:16px;background:radial-gradient(ellipse at top,#4a1737,#15101b 75%);text-align:center}.secret-result.open{display:block;animation:enter .3s ease-out}.secret-result .secret-glitch{font:950 20px ui-monospace,monospace;letter-spacing:2px;color:#ff6d91;text-shadow:2px 0 #5ff7ed,-2px 0 #92254f;animation:beyondGlitch 2s steps(1) infinite}.secret-result p{margin-top:8px}
+.beyond-zone .broken-note{position:relative;color:#ad8999;font:9px/1.7 ui-monospace,monospace;margin-top:12px}
+.beyond-zone .broken-note b{color:#ff6686}
+@keyframes beyondGlitch{0%,91%,100%{transform:none;opacity:1}92%{transform:translateX(2px) skewX(5deg);opacity:.72}94%{transform:translateX(-3px);opacity:1}96%{transform:translateX(1px);opacity:.8}}
 
-</style>
-<style id="lookgram-tap-fix">
-#tapButton {
-  -webkit-tap-highlight-color: transparent !important;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-  touch-action: manipulation;
-  outline: none;
-}
-#tapButton img, #tapButton svg {
-  pointer-events: none;
-  -webkit-user-drag: none;
-  user-drag: none;
-}
-#tapButton.lookgram-tap-anim {
-  animation: lookgramCoinTap .16s ease-out;
-}
-@keyframes lookgramCoinTap {
-  0% { transform: scale(1); }
-  45% { transform: scale(.91) rotate(-3deg); }
-  100% { transform: scale(1); }
-}
-</style>
+/* Hidden Glitch Clicker: intentionally dim, unstable, and non-functional preview. */
+.glitch-entry{position:relative;overflow:hidden;border:1px solid #593047!important;background:linear-gradient(110deg,#21101d,#0b0910)!important;color:#e8b0c2!important;animation:glitchEntry 3.2s steps(1) infinite;box-shadow:0 0 18px #ff28551b,inset 0 0 18px #000!important}
+.glitch-entry:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 7px,#ff41680a 8px,#0004 9px);}
+@keyframes glitchEntry{0%,88%,100%{transform:none;filter:none}89%{transform:translateX(1px);filter:brightness(1.4)}91%{transform:translateX(-2px) skewX(-1deg);filter:contrast(1.3)}93%{transform:none;filter:brightness(.7)}}
+#glitchClickerMode{display:none;position:fixed;inset:0;z-index:80;overflow:auto;background:#030205;color:#b9aab9;padding:calc(14px + env(safe-area-inset-top)) 15px calc(28px + env(safe-area-inset-bottom));isolation:isolate}
+#glitchClickerMode.open{display:block;animation:glitchScreenIn .7s steps(1) both}
+@keyframes glitchScreenIn{0%{opacity:0;filter:brightness(0)}35%{opacity:.8;filter:brightness(.3)}38%{opacity:.2}50%,100%{opacity:1;filter:brightness(.72)}}
+.glitch-app{max-width:530px;margin:auto;position:relative;min-height:100%;filter:brightness(.66)}
+.glitch-top{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #25121f;padding:8px 1px 18px;font-size:12px;letter-spacing:2px;color:#795669}
+.glitch-bal{border:1px solid #301525;background:#0b070d;padding:9px 11px;border-radius:11px;font:11px ui-monospace,monospace;color:#b85a7d}
+.glitch-hero{margin-top:18px;border:1px solid #321629;border-radius:20px;padding:19px;background:linear-gradient(145deg,#130a13,#07060a 70%);box-shadow:0 0 35px #000}
+.glitch-kicker{font:9px ui-monospace,monospace;letter-spacing:3px;color:#79475f}
+.glitch-heading{font-size:29px;line-height:1.1;font-weight:950;color:#7d4a64;margin:12px 0;text-shadow:2px 0 #3c6b69,-2px 0 #5b1d37;animation:beyondGlitch 2.3s steps(1) infinite}
+.glitch-copy{font:11px/1.8 ui-monospace,monospace;color:#574655;max-width:100%;overflow-wrap:anywhere}
+.glitch-coin-wrap{padding:32px 0 21px;text-align:center;position:relative}
+.glitch-coin{width:154px;height:154px;border-radius:50%;margin:auto;border:2px solid #492037;display:grid;place-items:center;background:radial-gradient(circle at 32% 25%,#54213d,#1b0d1b 49%,#050407 80%);box-shadow:0 0 34px #a11b4a1c,inset 0 0 0 8px #0008;color:#7c3b5a;font:900 48px Georgia,serif;position:relative}
+.glitch-coin:before{content:"";position:absolute;inset:10px;border:1px dashed #70314e;border-radius:50%;animation:coinJitter 5s steps(1) infinite}
+@keyframes coinJitter{0%,89%,100%{transform:none}90%{transform:translate(2px,-1px)}93%{transform:translate(-1px,2px) rotate(3deg)}}
+.glitch-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+.glitch-stat{border:1px solid #241320;background:#08060a;padding:12px;border-radius:12px;min-height:70px}
+.glitch-stat small{display:block;font:8px ui-monospace,monospace;color:#56394e;letter-spacing:1px;margin-bottom:9px}
+.glitch-stat b{font:12px ui-monospace,monospace;color:#7d4b66}
+.glitch-disabled{border:1px solid #29121f;background:#09060b;border-radius:13px;padding:13px;text-align:center;color:#493044;font:10px ui-monospace,monospace;letter-spacing:2px;margin-top:10px;position:relative;overflow:hidden}
+.glitch-disabled:after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,#a5214b12 50%,transparent 65%);transform:translateX(-100%);animation:glitchSweep 4s ease-in-out infinite}
+@keyframes glitchSweep{to{transform:translateX(100%)}}
+.glitch-broken{font:10px/2 ui-monospace,monospace;color:#3c2b3b;letter-spacing:1px;overflow-wrap:anywhere;margin-top:15px;min-height:95px}
+.glitch-exit{width:100%;margin-top:20px;border:1px solid #432035;background:#100811;color:#80536d;padding:12px;border-radius:12px;font-size:10px;letter-spacing:1px}
 
-</head>
-<body>
+.glitch-release-status{font:10px/1.8 ui-monospace,monospace;color:#ff6d91;text-align:center;min-height:0;margin-top:8px}
+body.glitch-event-active{animation:realityFlicker .19s steps(1) infinite;filter:brightness(.54) contrast(1.2) saturate(.65)}
+body.glitch-event-active .app{animation:screenTear .31s steps(1) infinite;filter:url(#lookgramTear)}
+body.glitch-event-active .app :is(h1,p,b,small,span,button,label){animation:letterDrop .23s steps(1) infinite; text-shadow:1px 0 #8affef,-1px 0 #ff174f}
+body.glitch-event-active .coin{animation:coinBreak .17s steps(1) infinite;filter:contrast(1.7) brightness(.55)}
+body.glitch-event-active .coin:after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(132deg,transparent 0 25%,#050307 25.5% 28%,transparent 28.5% 47%,#050307 47.5% 50%,transparent 50.5% 72%,#050307 72.5% 74%,transparent 74.5%),linear-gradient(30deg,transparent 0 43%,#ff315544 43.5% 45%,transparent 45.5%);clip-path:polygon(0 8%,46% 18%,38% 42%,61% 46%,45% 70%,100% 81%,100% 100%,0 100%);pointer-events:none}
+body.glitch-event-active .hero,body.glitch-event-active .panel{animation:panelBreak .27s steps(1) infinite}
+@keyframes realityFlicker{0%,100%{transform:none}25%{transform:translateX(2px)}50%{transform:translateX(-3px)}75%{transform:skewX(.5deg)}}
+@keyframes screenTear{0%,100%{transform:none;clip-path:inset(0)}25%{transform:translateX(-3px);clip-path:inset(9% 0 76% 0)}50%{transform:translateX(3px);clip-path:inset(40% 0 32% 0)}75%{transform:none;clip-path:inset(72% 0 5% 0)}}
+@keyframes letterDrop{0%,100%{opacity:1}23%{opacity:.12}24%{opacity:1}58%{opacity:.35}59%{opacity:.04}61%{opacity:1}}
+@keyframes coinBreak{0%,100%{transform:translate(0,0) rotate(0)}30%{transform:translate(3px,-2px) rotate(4deg);clip-path:polygon(0 0,100% 0,100% 38%,64% 42%,71% 61%,100% 59%,100% 100%,0 100%)}60%{transform:translate(-2px,2px) rotate(-3deg);clip-path:polygon(0 0,62% 0,55% 30%,100% 40%,100% 100%,0 100%)}}
+@keyframes panelBreak{0%,100%{transform:none}40%{transform:translateX(2px)}41%{transform:translateX(-2px)}70%{filter:brightness(.35)}}
+.creature-secret-button{display:block;width:min(100%,310px);margin:20px auto 0;padding:15px 12px;border-radius:14px;border:1px solid #ff718d;background:linear-gradient(100deg,#180d19,#4b102b,#160b18);color:#ffd8e3;font-size:11px;font-weight:950;letter-spacing:1.5px;box-shadow:0 0 22px #ff245566,inset 0 0 14px #ff41681c;animation:creaturePulse 1.7s ease-in-out infinite;cursor:pointer}
 
-<div class="lg-fx-layer" id="lgFxLayer" aria-hidden="true"></div>
-
-<main class="app">
-<header class="top"><div class="brand"><div class="brand-logo">L</div><div>LOOKGRAM<small>GAMES · MINI APP</small></div></div><div class="top-right"><button aria-label="Звук" class="icon-btn" id="soundToggle">🔊</button><div class="balance-pill"><span>🪙</span><b id="balance">500 000</b></div></div></header>
-<section class="screen active" id="screen-tap"><div class="hero"><div class="hero-kicker">LOOKGRAM COIN</div><h1>Тапай. Копи.<br/>По 0,1 монеты</h1><p>Каждое нажатие приносит +0,1 виртуальной монеты. Лимит — 1500 нажатий за цикл.</p><div class="hero-bottom"><div class="stat"><small>ТВОЙ БАЛАНС</small><b id="tapBalance">0 🪙</b></div><div class="live-dot">● ONLINE DEMO</div></div></div><button aria-label="Получить 0,1 монеты" class="tap-orb" id="tapButton"><span class="coin-face">L</span></button><div class="tap-count" id="tapReward">+0,1 🪙</div><p class="fine" style="text-align:center;margin:7px 0 17px">Нажимай на монету — каждый тап приносит виртуальные монеты.</p><button class="main-btn" data-screen="upgrades" id="goLookgrader" style="margin-top:8px">⚡ Апгрейдер кликов</button><div class="panel"><div class="panel-title"><b>Твой прогресс</b><span class="tag">LOOKGRAM</span></div><div class="owner-row"><span>Всего тапов за цикл</span><b id="tapTotal">0 / 1500</b></div><div class="owner-row"><span>Доход за тап</span><b>+0,1 🪙</b></div><div class="divider"></div><div class="owner-row"><span>Следующий сброс лимита</span><b id="tapResetCountdown">Загрузка таймера…</b></div><p class="fine" id="tapResetNote" style="margin:8px 0 0">Лимит обновляется каждые 24 часа от старта сервера.</p></div></section>
+.market-unlock{display:block;width:min(100%,310px);margin:10px auto 0;padding:14px 12px;border-radius:14px;border:1px solid #b95b77;background:linear-gradient(110deg,#261322,#52172f,#1b101c);color:#ffe0e8;font-size:11px;font-weight:950;letter-spacing:1.2px;box-shadow:0 0 20px #ff41681c;cursor:pointer}
+.market-unlock[hidden],.market-panel[hidden]{display:none}
+.market-panel{margin-top:14px;border:1px solid #63364f;border-radius:19px;padding:15px;background:radial-gradient(ellipse at 50% 0%,#40152d,#160f1a 70%);box-shadow:0 0 25px #ff31551a}
+.market-ticker{display:flex;justify-content:space-between;align-items:center;gap:10px;font:9px ui-monospace,monospace;letter-spacing:1.4px;color:#c7a5bb}
+.market-mult{font-size:43px;line-height:1.1;font-weight:1000;text-align:center;color:#ffe0e8;text-shadow:0 0 22px #ff41685c;margin:18px 0 5px;font-variant-numeric:tabular-nums}
+.market-mult.hot{color:#ff8a9e;text-shadow:0 0 26px #ff174f}
+.market-sub{text-align:center;color:#bca4b8;font-size:10px;line-height:1.6;margin-bottom:14px}
+.market-track{height:8px;border-radius:99px;background:#321d30;overflow:hidden;margin:12px 0}
+.market-track span{display:block;width:10%;height:100%;background:linear-gradient(90deg,#a8173e,#ff8ca5);box-shadow:0 0 14px #ff4168;transition:width .3s}
+.market-status{font:9px ui-monospace,monospace;text-align:center;color:#ff9ab0;letter-spacing:1px;margin:10px 0}
+.market-panel .btn{margin-top:7px}
 
 
-<section class="screen" id="screen-upgrades">
-  <div class="hero">
-    <div class="hero-kicker">LOOKGRAM · CLICK LAB</div>
-    <h1>Улучши свой<br>кликер ⚡</h1>
-    <p>Прокачивай силу клика, лимит, время сброса и автоматические нажатия.</p>
-    <div class="hero-bottom">
-      <div class="stat">
-        <small>КЛИКОВ В ТЕКУЩЕМ ЦИКЛЕ</small>
-        <b id="upgradeClicks">0</b>
-      </div>
-      <div class="live-dot">● CLICK LAB</div>
-    </div>
+/* Exchange occasionally corrupts the coin while active. */
+.coin.market-glitching{animation:marketCoinGlitch .24s steps(1) 2!important;filter:contrast(1.8) saturate(1.8);box-shadow:4px 0 #64fff0,-4px 0 #ff174f,0 0 35px #ff174f!important}
+.coin.market-glitching:after{content:"";position:absolute;inset:-3px;border-radius:50%;background:repeating-linear-gradient(0deg,transparent 0 8px,#ff315588 9px,#64fff044 11px,transparent 13px);mix-blend-mode:screen;pointer-events:none}
+@keyframes marketCoinGlitch{0%,100%{transform:translateX(0) skewX(0)}20%{transform:translateX(-4px) skewX(-5deg);clip-path:inset(15% 0 55% 0)}40%{transform:translateX(4px);clip-path:inset(45% 0 20% 0)}60%{transform:translateX(-2px) skewX(3deg);clip-path:inset(30% 0 35% 0)}80%{transform:translateX(1px);clip-path:none}}
+.glitch-terminal{margin:14px 0;padding:12px;border:1px solid #512039;border-radius:12px;background:#050407;color:#ff779d;font:10px/1.9 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere;min-height:96px;box-shadow:inset 0 0 20px #ff174f12}
+.glitch-terminal:before{content:'LOOKGRAM SYSTEM TERMINAL';display:block;color:#8e496a;letter-spacing:2px;margin-bottom:5px}
+.glitch-terminal .terminal-line{display:block;animation:terminalIn .16s steps(2) both}
+@keyframes terminalIn{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:none}}
+
+#glitchBreakScreen{display:none;position:fixed;inset:0;z-index:10000;background:#000;color:#fff;align-items:center;justify-content:center;text-align:center;padding:24px;overflow:hidden}
+#glitchBreakScreen.open{display:flex;animation:breakScreenIn .45s steps(2) both}
+#glitchBreakScreen:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#ff174f0d 6px,transparent 8px);pointer-events:none}
+.glitch-break-content{position:relative;max-width:100%;font-family:ui-monospace,monospace;font-weight:1000;letter-spacing:clamp(1px,1vw,5px);line-height:1.06;text-shadow:3px 0 #ff174f,-3px 0 #55fff1;animation:breakTextJitter .22s steps(1) infinite}
+.glitch-break-title{font-size:clamp(34px,9vw,86px);overflow-wrap:anywhere}
+.glitch-break-thanks{font-size:clamp(28px,7vw,64px);margin-top:28px;color:#ff426c;text-shadow:3px 0 #55fff1,-3px 0 #8e1740}
+.glitch-break-sub{font-size:clamp(10px,2.6vw,16px);letter-spacing:3px;color:#777;margin-top:28px}
+@keyframes breakScreenIn{0%{opacity:0;filter:brightness(0)}45%{opacity:.35}100%{opacity:1}}
+@keyframes breakTextJitter{0%,88%,100%{transform:none;filter:none}89%{transform:translateX(3px) skewX(2deg);filter:brightness(1.8)}92%{transform:translateX(-4px);filter:contrast(2)}95%{transform:translateX(1px)}}
+
+.achievement-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:12px}.achievement-tab{border:1px solid #543047;border-radius:12px;padding:11px 5px;background:#1a111d;color:#bca7b9;font-size:11px;font-weight:900;cursor:pointer}.achievement-tab.active{border-color:#ff7795;background:linear-gradient(145deg,#4a1b30,#241322);color:#fff;box-shadow:0 0 18px #ff31551c}.achievement-tab small{display:block;margin-top:4px;color:inherit;opacity:.7;font-size:9px}.challenge-unlock{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:22px;background:#050308d9;backdrop-filter:blur(9px)}.challenge-unlock.open{display:flex;animation:enter .22s ease-out}.challenge-unlock-card{width:min(100%,390px);position:relative;overflow:hidden;border:1px solid #ff6c8d;border-radius:24px;padding:25px 20px;text-align:center;background:radial-gradient(ellipse at 50% 0%,#68213c 0%,#21111f 53%,#0c0910 100%);box-shadow:0 0 55px #ff315538,inset 0 1px #ffffff12}.challenge-unlock-card:before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(135deg,transparent 0 17px,#ff54740b 18px 19px)}.challenge-unlock-card>*{position:relative}.challenge-unlock-icon{font-size:42px;filter:drop-shadow(0 0 14px #ff526f)}.challenge-unlock-kicker{font-size:9px;letter-spacing:3px;color:#ff9eb4;font-weight:950;margin:12px 0}.challenge-unlock-card h2{font-size:25px;line-height:1.1;margin:0;color:#fff;letter-spacing:-.5px}.challenge-unlock-card .challenge-name{font-size:18px;font-weight:950;color:#ffb4c5;margin:15px 0 9px}.challenge-unlock-card p{font-size:12px;color:#e6d6df;line-height:1.5}.challenge-unlock-card .challenge-title{margin:14px 0;padding:12px;border:1px solid #8e4a62;border-radius:12px;background:#351627;color:#ffd3df;font-size:13px;font-weight:900}.challenge-unlock-card button{width:100%;margin-top:8px}.og-unlock-btn{display:block!important;border:1px solid #ff7a98!important;background:linear-gradient(105deg,#65142e,#d92f58,#5b1839)!important;color:#fff!important;font-weight:1000!important;letter-spacing:2px!important;box-shadow:0 0 25px #ff31554d,inset 0 1px #ffffff44!important;animation:ogPulse 1.8s ease-in-out infinite}.og-unlock-btn.ready{display:block!important}@keyframes ogPulse{0%,100%{box-shadow:0 0 15px #ff31552b,inset 0 1px #ffffff22}50%{box-shadow:0 0 29px #ff315580,inset 0 1px #ffffff55}}.og-mini-button{width:36px;height:30px;flex:none;border:1px solid #654052;border-radius:9px;background:#21131f;color:#c7a2b6;font-size:10px;font-weight:900;letter-spacing:.5px;cursor:pointer;box-shadow:none;animation:none;padding:0}.og-mini-button:active{transform:scale(.94)}
+[hidden]{display:none!important}
+</style></head><body><svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden"><filter id="lookgramTear" x="-5%" y="-20%" width="110%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.018 0.11" numOctaves="2" seed="17" result="rough"/><feDisplacementMap in="SourceGraphic" in2="rough" scale="2" xChannelSelector="R" yChannelSelector="G"/></filter></svg><div class="fx" id="fx" aria-hidden="true"></div><div id="glitchBreakScreen" role="status" aria-live="assertive"><div class="glitch-break-content"><div class="glitch-break-title">ГЛИТЧ ВЫРВАЛСЯ НАРУЖУ</div><div class="glitch-break-thanks">СПАСИБО</div><div class="glitch-break-sub">LOOKGRAM SYSTEM · CONTAINMENT FAILED</div></div></div><div class="descent-darkness" id="descentDarkness" aria-hidden="true"></div><main class="app">
+<header><div class="brand"><div class="logo">L</div><div>LOOKGRAM<small>CLICKER · LOCAL PREVIEW</small></div></div><div class="balance"><span>КЛИКИ</span><b id="headerBalance">0.00</b></div></header>
+<section class="screen active" id="screen-tap">
+ <div class="hero"><div class="kicker">LOOKGRAM COIN</div><h1>Кликер</h1><p>Нажимай на монету, чтобы получать Клики.</p><div class="hero-bottom"><div class="stat"><small>ТВОЙ БАЛАНС</small><b id="heroBalance">0.00 КЛИКИ</b></div><div class="online">● CLICKER ONLINE</div></div></div>
+ <div class="coin-area"><button class="coin" id="coinButton" aria-label="Нажать на монету"><span class="coin-face">L</span></button><div class="reward" id="clickReward">+1 КЛИК</div><button type="button" class="market-unlock" id="openClickExchange" hidden>📈 БИРЖА КЛИКОВ <span style="display:block;font-size:8px;letter-spacing:2px;color:#ff9ab0;margin-top:5px">ДАР СУЩЕСТВА · TEST MARKET</span></button><div class="market-panel" id="clickExchangePanel" hidden><div class="market-ticker"><span>LOOKGRAM EXCHANGE</span><span id="marketStatusTag">● ОЖИДАНИЕ</span></div><div class="market-mult" id="marketMultiplier">1.00×</div><div class="market-sub">Текущий множитель применяется к каждому клику.<br>Курс меняется каждые 15 секунд: от 0,01× до 10×.</div><div class="market-track"><span id="marketTrackFill" style="width:10%"></span></div><div class="row"><span>Доход за следующий клик</span><b id="marketNextReward">1,00 КЛИКИ</b></div><div class="row"><span>Обновление курса</span><b id="marketCountdown">15 сек.</b></div><div class="market-status" id="marketMessage">БИРЖА ОСТАНОВЛЕНА</div><button class="btn" id="toggleClickExchange">▶ ВКЛЮЧИТЬ БИРЖУ</button><button class="btn secondary" id="closeClickExchange">СВЕРНУТЬ</button><p class="mini" style="margin-top:10px">Тестовая локальная механика HTML. Курс случайный; большие множители выпадают значительно реже.</p></div></div>
+ <div class="panel"><div class="panel-title"><span>Твой прогресс</span><span class="tag">ЛИМИТ ЦИКЛА</span></div><div class="row"><span>Кликов за текущий цикл</span><b id="clickCount">0</b></div><div class="meter"><span id="clickMeter" style="width:100%"></span></div><div class="row"><span>Доступно кликов</span><b id="clickRemaining">∞</b></div><div class="row"><span>КЛИКОВ за нажатие</span><b id="tapPower">0.10 КЛИКИ</b></div><div class="row"><span>Лимит тапов</span><b id="mainClickLimit">500</b></div><b class="number" id="resetTimer" hidden>∞</b></div>
+ <div class="panel"><div class="panel-title"><span>Статистика</span><span class="tag">ВСЁ ВРЕМЯ</span></div><div class="row"><span>Всего кликов</span><b id="totalClicks">0</b></div><div class="row"><span>Всего заработано</span><b id="totalEarned">0.00 КЛИКИ</b></div><div class="row"><span>Потрачено на улучшения</span><b id="totalSpent">0.00 КЛИКИ</b></div><div class="row"><span>Автокликер</span><b id="autoStatus">Не куплен</b></div></div>
+ <button class="btn secondary" data-goto="upgrades">⚡ ПЕРЕЙТИ К УЛУЧШЕНИЯМ</button>
+ <div aria-hidden="true" class="descent-gap"></div>
+ <div class="vacuum-rift vacuum-between" id="vacuumRift" aria-label="Разрыв в пространстве">
+  <div class="rift-stars" aria-hidden="true"></div>
+ </div>
+ <div aria-hidden="true" class="rift-after-gap"></div>
+ <div class="beyond-zone" id="beyondZone" aria-label="Секретная зона За гранью">
+  <div class="beyond-head"><span>/// ПОВРЕЖДЁННЫЙ СЕКТОР</span><span class="beyond-status">НЕ ДОЛЖНО БЫТЬ ВИДНО</span></div>
+  <div class="glitch-label">ЗА ГРАНЬЮ<span style="opacity:.55">_</span></div>
+  <div class="broken-window">
+   <div class="broken-title"><span>lookgram://internal/render.js</span><span style="color:#ff4d64">● ERR</span></div>
+   <div class="code-lines"><div><span class="ln">01</span><span class="pink">const</span> interface = <span class="yellow">"broken"</span>;</div><div><span class="ln">02</span><span class="pink">if</span> (user.scroll <span class="red">=== undefined</span>) {</div><div><span class="ln">03</span>&nbsp;&nbsp;render(<span class="green">"you_should_not_be_here"</span>);</div><div><span class="ln">04</span>&nbsp;&nbsp;balance = <span class="red">NaN</span>; <span style="color:#75566b">// не трогать настоящий баланс</span></div><div><span class="ln">05</span>}</div></div>
   </div>
-
-  <div class="panel">
-    <div class="panel-title">
-      <b>⚡ Сила клика</b>
-      <span class="tag" id="clickPowerLevel">Уровень 0</span>
-    </div>
-    <p class="section-intro">Каждый уровень повышает награду за нажатие на 0,05. Последний уровень открывает 1 за клик.</p>
-    <div id="clickPowerUpgrades"></div>
+  <div class="broken-window">
+   <div class="broken-title"><span>ROOT / UI FRAGMENT</span><span style="color:#ff4d64">404</span></div>
+   <div class="code-lines"><div><span class="ln">06</span>&lt;<span class="pink">div</span> class=<span class="green">"reality"</span>&gt;</div><div><span class="ln">07</span>&nbsp;&nbsp;&lt;<span class="pink">unknown-component</span> /&gt;</div><div><span class="ln">08</span>&nbsp;&nbsp;<span class="red">ERROR: reality not found</span></div><div><span class="ln">09</span>&lt;/<span class="pink">div</span>&gt; <span class="red">???</span></div><div><span class="ln">10</span><span class="pink">commands</span> = <span class="yellow">"5732"</span>; <span style="color:#75566b">// reserved</span></div></div>
   </div>
-
-  <div class="panel">
-    <div class="panel-title">
-      <b>🎯 Максимум кликов</b>
-      <span class="tag" id="clickLimitLevel">500</span>
-    </div>
-    <p class="section-intro">Повышай лимит кликов за цикл.</p>
-    <div id="clickLimitUpgrades"></div>
-  </div>
-
-  <div class="panel">
-    <div class="panel-title">
-      <b>⏱️ Время сброса</b>
-      <span class="tag" id="resetLevel">24 часа</span>
-    </div>
-    <p class="section-intro">Сокращай ожидание до следующего цикла.</p>
-    <div id="resetUpgrades"></div>
-  </div>
-
-  <div class="panel">
-    <div class="panel-title">
-      <b>🤖 Автокликер</b>
-      <span class="tag" id="autoStatus">Выключен</span>
-    </div>
-    <p class="section-intro">Работает автоматически, пока мини-приложение открыто.</p>
-    <div id="autoClickerUpgrades"></div>
-    <button class="main-btn secondary" id="autoClickerToggle" style="margin-top:12px">▶ Включить автокликер</button>
-    <p class="fine" style="margin:9px 0 0">Автокликер остановится при закрытии мини-приложения.</p>
-  </div>
-
-  <div class="notice">
-    Покупки пока не списывают Луккоины: для этого нужно подключить серверную проверку покупки. Мы не будем выдавать локальный баланс за настоящий.
-  </div>
+  <div class="broken-note"><b>WARNING:</b> обнаружен фрагмент интерфейса вне карты приложения.<br>Источник: <b>UNKNOWN</b> · состояние: <b>PARTIALLY LOADED</b><br><span style="color:#ff6686">&gt; не пытайтесь чинить реальность_</span></div>
+ </div>
 </section>
+<section class="screen" id="screen-upgrades"><div class="hero"><div class="kicker">LOOKGRAM · CLICK LAB</div><h1>Улучшения<br>кликера ⚡</h1><p>Увеличивай количество КЛИКОВ за одно нажатие. Максимум обычного улучшения — 1 КЛИК за нажатие.</p><div class="hero-bottom"><div class="stat"><small>НАГРАДА ЗА КЛИК</small><b id="upgradePower">1 КЛИК</b></div><div class="online" id="upgradeLevel">УРОВЕНЬ 0 / 18</div></div></div>
+ <div class="panel"><div class="panel-title"><span>✦ Больше за нажатие</span><span class="tag">МАКС. 1 КЛИК</span></div><p>Каждый уровень повышает награду на 0,05 КЛИКА, максимум — 1 за нажатие. Цена указана на кнопке.</p><div class="upgrade"><div class="up-icon">✦</div><div class="up-copy"><b>Увеличить КЛИКИ за нажатие</b><small id="powerDesc">Следующий уровень: +0,05 КЛИКА за нажатие</small></div><button class="price" id="buyPower">Купить · 250 КЛИКИ</button></div><div class="row"><span>Текущая награда</span><b id="powerCurrent">0,1 КЛИКА</b></div><div class="row"><span>Следующая награда</span><b id="powerNext">0,15 КЛИКА</b></div></div>
+ <div class="panel"><div class="panel-title"><span>⏫ Увеличение лимита</span><span class="tag" id="limitTag">500 КЛИКОВ</span></div><div class="upgrade"><div class="up-icon">⏫</div><div class="up-copy"><b>Больше кликов за цикл</b><small id="limitDesc">Каждый уровень добавляет 200 кликов к лимиту.</small></div><button class="price" id="buyLimit">Купить · 250 КЛИКИ</button></div><div class="row"><span>Текущий лимит</span><b id="limitCurrent">500 кликов</b></div><div class="row"><span>Следующий лимит</span><b id="limitNext">700 кликов</b></div></div>
+ <div class="panel"><div class="panel-title"><span>⏱ Быстрая перезарядка</span><span class="tag" id="cooldownTag">5 ЧАСОВ</span></div><div class="upgrade"><div class="up-icon">⏱</div><div class="up-copy"><b>Сократить ожидание</b><small id="cooldownDesc">Каждый уровень уменьшает перезарядку на 30 минут.</small></div><button class="price" id="buyCooldown">Купить · 250 КЛИКИ</button></div><div class="row"><span>Текущее ожидание</span><b id="cooldownCurrent">05:00:00</b></div><div class="row"><span>После улучшения</span><b id="cooldownNext">04:30:00</b></div></div>
+ <div class="panel"><div class="panel-title"><span>🤖 Автокликер</span><span class="tag" id="autoTag">НЕ КУПЛЕН</span></div><div class="upgrade"><div class="up-icon">⌁</div><div class="up-copy"><b>Автокликер</b><small>Автокликер делает один клик за заданный интервал. Каждое улучшение сокращает интервал на 0,1 секунды, минимум до 0,1 секунды.</small></div><button class="price" id="buyAuto">Разблокировать · 2 000 КЛИКИ</button></div><div class="row"><span>Интервал между кликами</span><b id="autoSpeed">1,0 сек. на клик</b></div><div class="upgrade"><div class="up-icon">⚡</div><div class="up-copy"><b>Ускорить автокликер</b><small id="autoSpeedDesc">Сокращает интервал на 0,1 секунды за уровень, минимум — 0,1 секунды.</small></div><button class="price" id="buyAutoSpeed">Улучшить · 250 КЛИКИ</button></div><div class="row"><span>Осталось кликов</span><b id="autoRemaining">500</b></div><button class="btn secondary" id="toggleAuto" style="margin-top:12px" disabled>ЗАПУСТИТЬ АВТОКЛИКЕР</button><p class="mini" style="margin-top:9px">Автокликер работает только пока эта HTML-страница открыта.</p></div>
 
-<section class="screen" id="screen-profile"><div class="hero"><div class="hero-kicker">ТВОЙ ПРОФИЛЬ</div><h1>Играй в своём<br/>темпе.</h1><p>Настройки и технический статус прототипа.</p></div><div class="panel wallet-compact"><div class="panel-title"><b>Кошелёк</b><span class="tag">ВИРТУАЛЬНЫЕ МОНЕТЫ</span></div><div class="wallet-balance-row"><div><small>ДОСТУПНЫЙ БАЛАНС</small><strong id="walletBalance">0 🪙</strong></div><span class="wallet-type">ЛОКАЛЬНЫЙ</span></div></div><div class="panel wallet-history-compact"><div class="panel-title"><b>История кошелька</b><span class="eyebrow">ОПЕРАЦИИ</span></div><div id="walletHistory"><div class="empty">Пока действий нет</div></div></div><div class="panel profile-card"><div class="avatar" id="profileAvatar">L</div><div><h3 id="profileName">Lookgram Player</h3><p id="profileUsername">Гость · локальный профиль</p><span class="badge" id="profileTitle">Новичок</span></div></div><div class="panel"><div class="panel-title"><b>Настройки</b><span class="eyebrow">APP</span></div><div class="owner-row"><span>Звуковые эффекты</span><button aria-label="Переключить звук" class="switch on" id="soundSwitch"></button></div><div class="divider"></div><div class="owner-row"><span>Вибрация (если поддерживается)</span><button aria-label="Переключить вибрацию" class="switch on" id="vibrateSwitch"></button></div><div class="divider"></div><div class="owner-row"><span>Версия интерфейса</span><b>0.2.0 · Preview</b></div></div><div class="panel" id="adminPanel" hidden><div class="panel-title"><b>🛠 Админ-панель</b><span class="tag">ВЛАДЕЛЕЦ</span></div><p class="fine">Тест автоклика проверяет скорость интерфейса. Он не начисляет монеты и не увеличивает игровой лимит.</p><div class="result-box"><div><small>ТЕСТОВЫЕ ИМИТАЦИИ</small><strong id="autoClickCount">0</strong></div><div style="text-align:right"><small>ИНТЕРВАЛ</small><strong>10 мс</strong></div></div><button class="main-btn" id="autoClickStart" style="margin-top:10px">▶ Запустить автоклик-тест</button><button class="main-btn secondary" id="autoClickStop" style="margin-top:8px" disabled>■ Остановить</button></div></section>
+
+ <div class="panel" id="upgradeSecretPanel" hidden><div class="panel-title"><span>◈ Скрытый интерфейс</span><span class="tag">SIGNAL LOST</span></div><p>В панели обнаружен нестабильный элемент. Содержимое может быть повреждено.</p><div class="broken-note" style="margin:10px 0;padding:10px;border:1px solid #54304b;border-radius:10px;background:#100b14">FRAGMENT 02 · 2 3 7 5</div><button type="button" class="btn glitch-entry" id="upgradeGlitchButton" style="margin-top:12px">◈  ОТКРЫТЬ НЕИЗВЕСТНЫЙ СЕКТОР  ░▒</button><div class="secret-gate" id="upgradeGlitchGate"><div class="panel-title"><span>⌁ Восстановить доступ</span><span class="tag">4 DIGITS</span></div><p>Введи код фрагмента.</p><div class="secret-code-row"><input id="upgradeGlitchCode" type="password" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]{4}" aria-label="Код фрагмента"><button class="price" id="upgradeGlitchSubmit" type="button">Войти</button></div><div class="mini" id="upgradeGlitchError" style="margin-top:8px;color:#ff8299;min-height:12px"></div></div></div>
+</section>
+<section class="screen" id="screen-rating"><div class="hero"><div class="kicker">LOOKGRAM · LEADERBOARD</div><h1>Таблица<br>лидеров</h1><p>Рейтинг по накопленным кликам. В этом HTML остальные игроки — демонстрационные.</p><div class="hero-bottom"><div class="stat"><small>ТВОЁ МЕСТО</small><b id="myRank">#4</b></div><div class="online">● РЕЙТИНГ</div></div></div><div class="panel"><div class="panel-title"><span>🏆 Топ игроков</span><div style="display:flex;align-items:center;gap:7px"><span class="tag">ПО БАЛАНСУ</span><button id="leaderSecretButton" type="button" aria-label="Открыть скрытый доступ" title="">✦</button></div></div><div id="leaderboard"></div><div class="secret-gate" id="leaderSecretGate"><div class="panel-title" style="margin-bottom:5px"><span>⌁ Неизвестный сигнал</span><span class="tag">ЗАКРЫТО</span></div><p>Введи четырёхзначный ключ доступа.</p><div class="secret-code-row"><input id="leaderSecretCode" type="password" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]{4}" aria-label="Четырёхзначный ключ"><button class="price" id="leaderSecretSubmit" type="button">Войти</button></div><div class="mini" id="leaderSecretError" style="margin-top:8px;color:#ff8299;min-height:12px"></div></div><div class="secret-result" id="leaderSecretResult"><div style="font-size:28px;margin-bottom:8px">◈ ✦ ◈</div><div class="secret-glitch">СИГНАЛ НАЙДЕН</div><p>Ты открыл скрытый сектор Lookgram.<br>Система заметила тебя. Это только начало.</p><div style="font:9px ui-monospace,monospace;letter-spacing:2px;color:#9d8297;margin-top:12px">ACCESS GRANTED · FRAGMENT 01</div></div><div class="notice">Рейтинг локальный: реальные аккаунты появятся после подключения серверной части.</div></div></section>
+<section class="screen" id="screen-rewards"><div class="hero"><div class="kicker">LOOKGRAM · REWARDS</div><h1>Награды</h1><p>Выбери нужный раздел.</p></div><div class="panel reward-menu"><button class="reward-menu-btn" id="claimDaily"><span class="reward-menu-icon">🎁</span><span><b>Ежедневный бонус</b><small>Получить +50 КЛИКОВ</small></span><strong>+50</strong></button><button class="reward-menu-btn" id="openAchievements"><span class="reward-menu-icon">🏆</span><span><b>Достижения</b><small id="achievementMenuCount">Открыто: 0</small></span><strong>›</strong></button><button class="reward-menu-btn" id="openTitles"><span class="reward-menu-icon">👑</span><span><b>Титулы</b><small id="titlesMenuCount">Титулы ещё не добавлены</small></span><strong>›</strong></button><p id="dailyStatus" class="mini" style="margin-top:10px">Ежедневный бонус доступен.</p></div></section>
+<section class="screen" id="screen-achievements"><div class="hero"><div class="kicker">LOOKGRAM · ACHIEVEMENTS</div><h1>Достижения</h1><p>Здесь отображаются только согласованные достижения.</p><div class="hero-bottom"><div class="stat"><small>ОТКРЫТО</small><b id="achievementTotal">0 / 1</b></div><button class="price" data-goto="rewards">← Награды</button></div></div><div class="panel"><div class="achievement-tabs"><button class="achievement-tab active" data-ach-category="ordinary">🏆 Обычные<small id="ordinaryCount">0</small></button><button class="achievement-tab" data-ach-category="challenges">⚡ Челленджи<small id="challengeCount">0</small></button><button class="achievement-tab" data-ach-category="secret">◈ Секретные<small id="secretCount">0</small></button></div><div id="achievementList"></div></div></section>
+<section class="screen" id="screen-titles"><div class="hero"><div class="kicker">LOOKGRAM · TITLES</div><h1>Титулы</h1><p>Открывай титулы за достижения и выбирай тот, который будет отображаться в профиле и рейтинге.</p><div class="hero-bottom"><div class="stat"><small>ТЕКУЩИЙ ТИТУЛ</small><b id="titlesCurrent">Не выбран</b></div><button class="price" data-goto="rewards">← Награды</button></div></div><div class="panel"><div class="notice">Пока нет открытых титулов. Выполняй достижения и челленджи, чтобы получить их.</div></div></section>
+<section class="screen" id="screen-profile"><div class="hero"><div class="kicker">LOOKGRAM · PLAYER CARD</div><h1>Твой профиль</h1><p>Твой прогресс в Lookgram — уровень, опыт, статистика и выбранный титул.</p></div><div class="profile-hero" style="margin-top:11px"><div class="profile-top"><div class="profile-avatar">L</div><div><div class="profile-name">Lookgram Player</div><div class="profile-handle">@lookgram_player · LOOKGRAM ID</div><div class="title-chip" id="profileTitle">✦ Без титула</div></div></div><div class="level-row"><span id="profileLevel">УРОВЕНЬ 1</span><b id="profileXpText">0 / 1 000 XP</b></div><div class="xp-meter"><span id="profileXpBar"></span></div><div class="level-row"><span>Опыт за клики</span><span id="profileNextLevel">До следующего уровня: 1 000 XP</span></div></div><div class="profile-metrics"><div class="metric-tile"><small>💎 БАЛАНС</small><b id="profileBalance">0</b><em>КЛИКИ</em></div><div class="metric-tile"><small>⌁ ВСЕГО НАЖАТИЙ</small><b id="profileClicks">0</b><em>за всё время</em></div><div class="metric-tile"><small>⚡ ЗА ОДИН ТАП</small><b id="profilePower">1</b><em>КЛИКИ за нажатие</em></div><div class="metric-tile"><small>🛠 УЛУЧШЕНИЯ</small><b id="profileUpgrades">0</b><em>куплено уровней</em></div><div class="metric-tile"><small>📈 ВСЕГО ЗАРАБОТАНО</small><b id="profileEarned">0</b><em>КЛИКИ</em></div><div class="metric-tile"><small>🧾 ПОТРАЧЕНО</small><b id="profileSpent">0</b><em>КЛИКИ</em></div><div class="metric-tile"><small>🏆 ДОСТИЖЕНИЯ</small><b id="profileAchievementCount">0 / 1</b><em>открыто</em></div></div><div class="section-label">🪙 ЗАЧИСЛЕНИЕ В БОТ</div><div class="panel"><p>Перенеси клики на основной баланс Lookgram по курсу 1 КЛИК = 1 Луккоин. Поддерживаются дробные суммы. Лимит — 1 500 нажатий за цикл.</p><button class="btn" id="requestWithdraw" style="margin-top:12px">🪙 ЗАЧИСЛИТЬ НА БАЛАНС БОТА</button><p class="mini" style="margin-top:9px">Баланс бота обновится после обработки сообщения ботом.</p></div><div class="section-label">⚙ НАСТРОЙКИ ПРОФИЛЯ</div><div class="panel"><div class="setting-line"><div class="setting-copy"><b>Звуковой отклик</b><small>Короткий звук при нажатии на монету.</small></div><input type="checkbox" class="switch" id="soundSetting"></div><div class="setting-line"><div class="setting-copy"><b>Вибрация</b><small>Лёгкий отклик на поддерживаемых устройствах.</small></div><input type="checkbox" class="switch" id="vibrationSetting"></div><div class="setting-line"><div class="setting-copy"><b>OG-интерфейс</b><small>Секретный переход в старый Lookgram.</small></div><button type="button" id="openLegacyMode" class="og-mini-button" aria-label="Открыть OG-интерфейс" title="OG">OG</button></div></div><div class="section-label">⌘ АДМИНИСТРИРОВАНИЕ</div><div class="panel"><div class="panel-title"><span>⚙ Админ-панель</span><span class="tag">ЛОКАЛЬНАЯ</span></div><p>Задай, сколько целых КЛИКОВ начисляется за одно нажатие. Допустимое значение — от 1 до 100 000.</p><label class="mini" for="adminReward" style="display:block;margin:12px 0 6px">КЛИКОВ ЗА ОДНО НАЖАТИЕ (1–100 000)</label><div style="display:flex;gap:8px;align-items:center"><input class="field" id="adminReward" type="number" min="1" max="100000" step="1" value="1"><button class="price" id="saveAdminReward">Сохранить</button></div><p class="mini" style="margin-top:9px">Настройка действует только в этом локальном HTML, это не защищённая серверная админка.</p><div class="divider" style="height:1px;background:#352333;margin:16px 0"></div><div class="panel-title"><span>🔔 Проверка уведомлений</span><span class="tag">ТЕСТ</span></div><p>Проверь уведомление сверху экрана, с плавным исчезновением и полоской таймера.</p><button class="btn secondary" id="testNotification" style="margin-top:12px">Проверить уведомление</button></div><div class="panel"><button class="btn secondary" id="resetProgress">Сбросить локальный прогресс</button></div></section>
 </main>
-<nav aria-label="Основная навигация" class="nav"><button class="nav-btn active" data-screen="tap"><span>👆</span>Кликер</button><button class="nav-btn" data-screen="upgrades">⚡ Апгрейдер кликов</button><button class="nav-btn" data-screen="profile"><span>👤</span>Профиль</button></nav><div class="toast" id="toast"></div>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script>(()=>{'use strict';
-const $=id=>document.getElementById(id);
-const fmt=n=>Number(n).toLocaleString('ru-RU',{minimumFractionDigits:Number(n)%1?1:0,maximumFractionDigits:1});
-const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
-let balance=0, taps=0, soundOn=true, vibrateOn=true, lgTarget=1.5, lgChance=65, lgBusy=false, pointerAngle=0, history=[];
-const MAX_TAPS=1500, TAP_REWARD=0.1, CLICKER_CYCLE_MS=5*60*60*1000;
-// INTEGRATION: set this to your public HTTPS backend base URL when ready.
-// Backend contract: GET /api/clicker/status -> { serverStartedAt: unix_ms, taps: number, resetAt: unix_ms }.
-// POST /api/clicker/tap with Telegram initData -> server validates user/limit and returns { taps, balance, resetAt }.
-// Never trust client-supplied Telegram user IDs or client-side balance for real rewards.
-const LOOKGRAM_API_BASE = 'https://lookgram.wisp.uno';
-let clickerResetAt=0, clickerServerMode=false, clickerTimer=null, clickerSyncBusy=false;
-function localCycleState(){let now=Date.now(), start=0;try{start=Number(localStorage.getItem('lookgramClickerCycleStart')||0)}catch(e){}if(!Number.isFinite(start)||start<=0||start>now)start=now;while(now>=start+CLICKER_CYCLE_MS){start+=CLICKER_CYCLE_MS;taps=0}clickerResetAt=start+CLICKER_CYCLE_MS;try{localStorage.setItem('lookgramClickerCycleStart',String(start));localStorage.setItem('lookgramTapState',JSON.stringify({taps,cycleStart:start}))}catch(e){} }
-function countdownText(ms){if(ms<=0)return 'обновление…';const total=Math.floor(ms/1000),h=Math.floor(total/3600),m=Math.floor((total%3600)/60),sec=total%60;return [h,m,sec].map((n,i)=>String(n).padStart(i===0?2:2,'0')).join(':')}
-function renderClickerTimer(){const el=$('tapResetCountdown');if(!el)return;if(taps>=MAX_TAPS){el.textContent='Лимит исчерпан · '+countdownText(clickerResetAt-Date.now());el.style.color='var(--pink)'}else{el.textContent=countdownText(clickerResetAt-Date.now());el.style.color='var(--gold)'}if($('tapResetNote'))$('tapResetNote').textContent=clickerServerMode?'Лимит сбросится по серверному циклу через 24 часа от старта сервера.':'Демо-режим: таймер идёт локально. После подключения API сброс будет считаться от старта сервера.'}
-async function syncClickerStatus(){if(!LOOKGRAM_API_BASE)return;try{const tg=window.Telegram?.WebApp;const res=await fetch(LOOKGRAM_API_BASE+'/api/clicker/status',{headers:{'X-Telegram-Init-Data':tg?.initData||''},cache:'no-store'});if(!res.ok)throw new Error('status '+res.status);const d=await res.json();if(!Number.isFinite(Number(d.serverStartedAt))||!Number.isFinite(Number(d.resetAt))||!Number.isFinite(Number(d.taps)))throw new Error('invalid status payload');clickerServerMode=true;clickerResetAt=Number(d.resetAt);taps=clamp(Math.floor(Number(d.taps)),0,MAX_TAPS);tapUi();renderClickerTimer()}catch(e){console.warn('Lookgram clicker status API unavailable; using local demo timer.',e);clickerServerMode=false;localCycleState();tapUi();renderClickerTimer()}}
-if(!clickerTimer)clickerTimer=setInterval(()=>{if(!clickerServerMode&&Date.now()>=clickerResetAt){localCycleState();tapUi()}renderClickerTimer()},1000);
-function toast(t){const e=$('toast');if(!e)return;e.textContent=t;e.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>e.classList.remove('show'),2400)}
-function tone(freq=440,duration=.08,type='sine',volume=.025,slide=0){if(!soundOn)return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=new C(),o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=freq;o.frequency.linearRampToValueAtTime(Math.max(40,freq+slide),c.currentTime+duration);g.gain.value=volume;o.connect(g);g.connect(c.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,c.currentTime+duration);o.stop(c.currentTime+duration);o.onended=()=>c.close()}catch(e){}}
-function vibrate(p=12){if(vibrateOn&&navigator.vibrate)navigator.vibrate(p)}
-function record(title,amount,kind){history.unshift({title,amount,kind,time:new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})});history=history.slice(0,20);renderLog()}
-function renderLog(){const e=$('walletHistory');if(!e)return;if(!history.length){e.innerHTML='<div class="empty">Пока действий нет</div>';return}e.innerHTML=history.map(x=>`<div class="owner-row"><span><b style="color:#fff">${x.title}</b><br><small class="muted">${x.time}</small></span><b style="color:${x.kind==='win'?'var(--green)':x.kind==='loss'?'var(--pink)':'var(--gold)'}">${x.kind==='win'?'+':x.kind==='loss'?'−':''}${fmt(Math.abs(x.amount))} 🪙</b></div><div class="divider"></div>`).join('')}
-function renderBalance(){['balance','tapBalance','walletBalance','lookgraderBalance'].forEach(id=>{if($(id))$(id).textContent=fmt(balance)+' 🪙'});if($('lookgraderBalanceInline'))$('lookgraderBalanceInline').textContent=fmt(balance);try{localStorage.setItem('lookgramDemoBalance',String(balance));localStorage.setItem('lookgramTapState',JSON.stringify({taps}))}catch(e){};lgUi()}
-function debit(n,title){balance=Math.round((balance-n)*10)/10;renderBalance();record(title,n,'bet')}
-function credit(n,title){balance=Math.round((balance+n)*10)/10;renderBalance();record(title,n,'win')}
-function showScreen(name){document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id==='screen-'+name));document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x.dataset.screen===name));window.scrollTo({top:0,behavior:'smooth'})}
-document.querySelectorAll('[data-screen]').forEach(b=>b.addEventListener('click',()=>showScreen(b.dataset.screen)));
-function tapUi(){if($('tapReward'))$('tapReward').textContent='+0,1 🪙';if($('tapTotal'))$('tapTotal').textContent=String(taps)+' / '+MAX_TAPS;if($('tapButton'))$('tapButton').disabled=taps>=MAX_TAPS;renderClickerTimer()}
-async function handleClickerTap(){if(clickerSyncBusy)return;if(taps>=MAX_TAPS){toast('Лимит 1500 нажатий достигнут. Сброс через '+countdownText(clickerResetAt-Date.now()));return}
- if(LOOKGRAM_API_BASE){clickerSyncBusy=true;const btn=$('tapButton');if(btn)btn.disabled=true;try{const tg=window.Telegram?.WebApp;const res=await fetch(LOOKGRAM_API_BASE+'/api/clicker/tap',{method:'POST',headers:{'Content-Type':'application/json','X-Telegram-Init-Data':tg?.initData||''},body:JSON.stringify({initData:tg?.initData||''})});const d=await res.json();if(!res.ok)throw new Error(d.error||'tap_failed');taps=clamp(Math.floor(Number(d.taps)||0),0,MAX_TAPS);if(Number.isFinite(Number(d.balance)))balance=Number(d.balance);if(Number.isFinite(Number(d.resetAt)))clickerResetAt=Number(d.resetAt);renderBalance();tapUi();if(taps>=MAX_TAPS)toast('Лимит достигнут. Сброс через '+countdownText(clickerResetAt-Date.now()));}catch(e){toast('Не удалось связаться с сервером. Баланс не изменён.');console.error(e)}finally{clickerSyncBusy=false;tapUi()}return}
- taps++;balance=Math.round((balance+TAP_REWARD)*10)/10;try{localStorage.setItem('lookgramTapState',JSON.stringify({taps,cycleStart:clickerResetAt-CLICKER_CYCLE_MS}))}catch(e){}renderBalance();tapUi();tone(420,.045,'sine',.025,100);vibrate(8);const el=$('tapButton');if(el){el.classList.remove('lookgram-tap-anim');void el.offsetWidth;el.classList.add('lookgram-tap-anim');}if(taps===MAX_TAPS)toast('Лимит достигнут. Сброс через '+countdownText(clickerResetAt-Date.now()))}
-$('tapButton')?.addEventListener('click',handleClickerTap);
-function lgStake(){const n=Number($('lookgraderStake')?.value);return Number.isSafeInteger(n)&&n>=1&&n<=100000?n:0}
-function lgUi(){if(!$('lookgraderSpin'))return;if($('lookgraderBalance'))$('lookgraderBalance').textContent=fmt(balance)+' 🪙';if($('lookgraderBalanceInline'))$('lookgraderBalanceInline').textContent=fmt(balance);$('lookgraderMultiplier').textContent=lgTarget+'×';$('lookgraderChance').textContent=lgChance+'%';const n=lgStake();$('lookgraderPayout').textContent=fmt(Math.floor(n*lgTarget))+' 🪙';$('lookgraderLoss').textContent=fmt(n||0)+' 🪙';$('lookgraderSpin').disabled=lgBusy||!n||n>balance;$('lookgraderSpin').textContent=lgBusy?'⏳ СТРЕЛКА ВРАЩАЕТСЯ…':'🔵 ПОСТАВИТЬ И ЗАПУСТИТЬ'}
-function syncSector(){const w=$('lookgraderWheel');if(!w)return;const arc=clamp(lgChance,1,99)*3.6;w.style.background='conic-gradient(from '+(-arc/2)+'deg,#ff4168 0deg '+arc+'deg,#ffb34e '+arc+'deg '+(arc+1.2)+'deg,#202d44 '+(arc+1.2)+'deg 360deg)';const label=w.querySelector('.sector-label');if(label)label.textContent=lgChance+'%';w.setAttribute('aria-label','Зона успеха '+lgChance+' процентов')}
-document.querySelectorAll('#lookgraderTargets .target-card').forEach(b=>b.addEventListener('click',()=>{if(lgBusy)return;lgTarget=Number(b.dataset.mult);lgChance=Number(b.dataset.chance);document.querySelectorAll('#lookgraderTargets .target-card').forEach(x=>x.classList.toggle('selected',x===b));syncSector();lgUi()}));
-function spinLookgrader(){if(lgBusy)return;const stake=lgStake();if(!stake){toast('Укажи ставку от 1 до 100 000 монет');return}if(stake>balance){toast('Недостаточно монет');return}lgBusy=true;debit(stake,'Ставка · Lookgrader');lgUi();$('lookgraderResult').className='spin-result';$('lookgraderResult').innerHTML='<span class="eyebrow">РАУНД В ПРОЦЕССЕ</span><strong>Ставка '+fmt(stake)+' 🪙 принята</strong><small>Стрелка вращается. При проигрыше ставка остаётся списанной.</small>';$('lookgraderWheel').classList.add('spinning');const win=Math.random()*100<lgChance;const half=lgChance*3.6/2;const target=win?(Math.random()*lgChance*3.6-half+360)%360:half+Math.random()*(360-2*half);const extra=360*(5+Math.floor(Math.random()*3));pointerAngle+=extra+((target-(pointerAngle%360)+360)%360);const pointer=$('lookgraderPointer');pointer.style.transition='none';pointer.style.transform='translate(-50%,-50%) rotate(0deg)';void pointer.offsetWidth;pointer.style.transition='transform 4.4s cubic-bezier(.08,.72,.12,1)';pointer.style.transform='translate(-50%,-50%) rotate('+pointerAngle+'deg)';let ticks=0;const timer=setInterval(()=>{ticks++;tone(260+Math.min(ticks,18)*20,.025,'triangle',.012,0);if(ticks>=18)clearInterval(timer)},190);vibrate([12,35,12,35,20]);setTimeout(()=>{lgBusy=false;$('lookgraderWheel').classList.remove('spinning');if(win){const reward=Math.floor(stake*lgTarget);credit(reward,'Lookgrader · выплата '+lgTarget+'×');$('lookgraderResult').className='spin-result success';$('lookgraderResult').innerHTML='<span class="eyebrow">СЕКТОР ПОЙМАН</span><strong>Успех · '+lgTarget+'×</strong><small>Начислено '+fmt(reward)+' 🪙 (включая возврат ставки).</small>';tone(740,.12,'sine',.05,200);setTimeout(()=>tone(980,.18,'sine',.04,150),100);toast('Lookgrader: выплата '+fmt(reward)+' 🪙')}else{$('lookgraderResult').className='spin-result fail';$('lookgraderResult').innerHTML='<span class="eyebrow">СЕКТОР ПРОПУЩЕН</span><strong>Проигрыш</strong><small>Ставка '+fmt(stake)+' 🪙 уже списана и не возвращается.</small>';record('Проигрыш · Lookgrader',stake,'loss');tone(130,.24,'sawtooth',.05,-70);toast('Lookgrader: ставка потеряна — '+fmt(stake)+' 🪙')}lgUi()},4500)}
-$('lookgraderSpin')?.addEventListener('click',spinLookgrader);$('lookgraderStake')?.addEventListener('input',lgUi);document.querySelectorAll('[data-lg-stake]').forEach(b=>b.addEventListener('click',()=>{$('lookgraderStake').value=b.dataset.lgStake==='max'?Math.min(100000,Math.floor(balance)):b.dataset.lgStake;lgUi()}));
-const LOOKGRAM_OWNER_ID='8086411525';let autoClickTestTimer=null,autoClickTestCount=0;function setAutoClickTest(running){const start=$('autoClickStart'),stop=$('autoClickStop');if(start)start.disabled=running;if(stop)stop.disabled=!running;if(!running&&autoClickTestTimer){clearInterval(autoClickTestTimer);autoClickTestTimer=null}}$('autoClickStart')?.addEventListener('click',()=>{if(autoClickTestTimer)return;autoClickTestCount=0;if($('autoClickCount'))$('autoClickCount').textContent='0';setAutoClickTest(true);autoClickTestTimer=setInterval(()=>{autoClickTestCount++;if($('autoClickCount'))$('autoClickCount').textContent=String(autoClickTestCount);const b=$('tapButton');if(b){b.animate([{transform:'scale(1)'},{transform:'scale(.96)'},{transform:'scale(1)'}],{duration:45})}if(autoClickTestCount>=10000){setAutoClickTest(false);toast('Тест остановлен после 10 000 имитаций')}} ,10);toast('Тест интерфейса запущен; баланс не меняется')});$('autoClickStop')?.addEventListener('click',()=>{setAutoClickTest(false);toast('Автоклик-тест остановлен')});function loadTelegramProfile(){try{const tg=window.Telegram&&window.Telegram.WebApp;if(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user){const u=tg.initDataUnsafe.user;const name=[u.first_name,u.last_name].filter(Boolean).join(' ')||'Пользователь Telegram';if($('profileName'))$('profileName').textContent=name;if($('profileUsername'))$('profileUsername').textContent=u.username?'@'+u.username:'Telegram · username не указан';if($('profileAvatar')&&u.photo_url){$('profileAvatar').textContent='';$('profileAvatar').style.backgroundImage='url("'+u.photo_url.replace(/"/g,'')+'")';$('profileAvatar').style.backgroundSize='cover';$('profileAvatar').style.backgroundPosition='center'}if($('profileTitle'))$('profileTitle').textContent='Игрок Lookgram';if(String(u.id)===LOOKGRAM_OWNER_ID&&$('adminPanel'))$('adminPanel').hidden=false;else if($('adminPanel'))$('adminPanel').hidden=true;tg.ready?.();tg.expand?.()}else{if($('profileUsername'))$('profileUsername').textContent='Открой через Telegram, чтобы определить владельца';if($('adminPanel'))$('adminPanel').hidden=true}}catch(e){if($('adminPanel'))$('adminPanel').hidden=true}}
-
-$('soundToggle')?.addEventListener('click',()=>{soundOn=!soundOn;$('soundToggle').textContent=soundOn?'🔊':'🔇';if($('soundSwitch'))$('soundSwitch').classList.toggle('on',soundOn)});$('soundSwitch')?.addEventListener('click',()=>{soundOn=!soundOn;$('soundSwitch').classList.toggle('on',soundOn);if($('soundToggle'))$('soundToggle').textContent=soundOn?'🔊':'🔇'});$('vibrateSwitch')?.addEventListener('click',()=>{vibrateOn=!vibrateOn;$('vibrateSwitch').classList.toggle('on',vibrateOn)});
-try{if(localStorage.getItem('lookgramBalanceZeroMigrationV1')!=='done'){balance=0;localStorage.setItem('lookgramDemoBalance','0');localStorage.setItem('lookgramBalanceZeroMigrationV1','done')}else{const b=Number(localStorage.getItem('lookgramDemoBalance'));if(Number.isFinite(b)&&b>=0)balance=b}const ts=JSON.parse(localStorage.getItem('lookgramTapState')||'null');if(ts&&Number.isFinite(Number(ts.taps)))taps=clamp(Math.floor(Number(ts.taps)),0,MAX_TAPS)}catch(e){balance=0}
-localCycleState();renderBalance();tapUi();syncSector();lgUi();loadTelegramProfile();renderLog();syncClickerStatus();
-})();</script>
+<div id="legacyMode" aria-label="Старый интерфейс Lookgram">
+  <div class="legacy-old-app">
+    <section class="legacy-screen active" id="legacy-clicker">
+      <div class="legacy-balance"><div class="label">МОЙ БАЛАНС</div><div class="value">Проверь в боте</div><div class="click-count">Кликов сделано: 0</div></div>
+      <div class="legacy-brand">🔴 LOOKGRAM</div>
+      <div class="legacy-subtitle">CLICKER • ЗАРАБАТЫВАЙ ЛУККОИНЫ</div>
+      <div class="legacy-stats">
+        <div class="legacy-stat"><div class="legacy-label">КЛИКИ</div><div class="legacy-value">0/1500</div><div class="legacy-progress"><span></span></div></div>
+        <div class="legacy-stat"><div class="legacy-label">ОБНОВЛЕНИЕ ЛИМИТА</div><div class="legacy-value">05:00:00</div><div class="legacy-label">Ожидание 1500 кликов</div></div>
+      </div>
+      <div class="legacy-coin-area"><div class="og-old-coin" aria-label="Старая золотая монета Lookgram"><span class="coin-face">L</span></div></div>
+      <div class="legacy-hint">Нажимай на монету, чтобы заработать</div>
+      <div class="legacy-transfer" aria-disabled="true">🔄 ПЕРЕНЕСТИ НА ОСНОВНОЙ БАЛАНС</div>
+    </section>
+    <section class="legacy-screen" id="legacy-settings">
+      <div class="legacy-settings-title">Настройки</div>
+      <div class="legacy-return-wrap"><button type="button" class="btn" id="returnNewInterface">↩ Вернуться в новый интерфейс</button></div>
+    </section>
+  </div>
+</div>
+<section id="glitchClickerMode" aria-label="Скрытый повреждённый кликер"><div class="glitch-app"><div class="glitch-top"><span>🔴 LOOKGRAM <span style="opacity:.35">// OFFLINE</span></span><span class="glitch-bal">КЛИКИ · <span>████</span></span></div><div class="glitch-hero"><div class="glitch-kicker">CLICKER / INSTANCE 02</div><div class="glitch-heading">КЛИКЕР<span style="opacity:.25">_</span>НЕ НАЙДЕН</div><div class="glitch-copy">СИСТЕМА ЗАПУЩЕНА НЕПОЛНОСТЬЮ<br>ЗАПИСЬ ПОВРЕЖДЕНА ▒▒▒▒▒▒<br>СТАТУС: <span style="color:#7b314e">UNSTABLE</span></div><div class="glitch-coin-wrap"><div class="glitch-coin">L<span style="position:absolute;font:8px ui-monospace,monospace;bottom:25px;letter-spacing:3px">LG</span></div><div class="glitch-heading" style="font-size:13px;letter-spacing:3px;margin-top:18px">НАЖАТИЕ_НЕ_ОТВЕЧАЕТ</div><div class="glitch-copy">0 ░▒░▒░▒ / 1500<br>███████████ — DATA LOST</div></div><div class="glitch-stat-grid"><div class="glitch-stat"><small>БАЛАНС</small><b>███.██</b></div><div class="glitch-stat"><small>ЛИМИТ</small><b>█▒█ / 1500</b></div><div class="glitch-stat"><small>СТАТУС</small><b>НЕИЗВЕСТЕН</b></div><div class="glitch-stat"><small>СИНХРОНИЗАЦИЯ</small><b>ОШИБКА ░▒</b></div></div><div class="glitch-disabled">◈ КЛИКЕР НЕ ОТВЕЧАЕТ ◈</div><div class="glitch-disabled">ПЕРЕНОС НА ОСНОВНОЙ БАЛАНС · НЕДОСТУПНО</div><div class="glitch-broken">[01] ЗАГРУЗКА █████▒▒▒<br>[02] LOOKG<span style="opacity:.12">R</span>AM / N̷O̷D̷E̷ 0x2375<br>[03] ТЕКСТ НЕ ПОЛУЧЕН: ▒▒▒▒▒▒▒▒<br>[04] п̷о̷с̷л̷е̷д̷н̷и̷й̷ ̷с̷и̷г̷н̷а̷л̷ ̷у̷т̷е̷р̷я̷н̷<br>[05] <span style="color:#633047">НЕ ПЫТАЙТЕСЬ ЧИНИТЬ РЕАЛЬНОСТЬ</span></div><div class="glitch-terminal" id="glitchTerminal" aria-live="polite">&gt; waiting_for_input_</div><div class="glitch-release-status" id="glitchReleaseStatus" aria-live="polite"></div><button type="button" class="glitch-exit" id="releaseGlitchButton">⛧ ВЫЗВОЛИТЬ ГЛИТЧА</button></div></div></section>
+<nav class="legacy-tabs" id="legacyTabs" aria-label="Старый интерфейс"><button class="active" data-legacy-tab="clicker">⌁ Кликер</button><button data-legacy-tab="settings">⚙ Настройки</button></nav>
+<nav class="nav" aria-label="Основная навигация"><button class="active" data-tab="tap"><span class="ico">⌁</span>Кликер</button><button data-tab="upgrades"><span class="ico">⚡</span>Апгрейдер</button><button data-tab="rating"><span class="ico">♜</span>Лидеры</button><button data-tab="rewards"><span class="ico">✦</span>Награды</button><button data-tab="profile"><span class="ico">◎</span>Профиль</button></nav><div class="challenge-unlock" id="challengeUnlock" role="dialog" aria-modal="true" aria-labelledby="challengeUnlockName"><div class="challenge-unlock-card"><div class="challenge-unlock-icon" id="challengeUnlockIcon">🏆</div><div class="challenge-unlock-kicker">LOOKGRAM · CHALLENGE COMPLETE</div><h2>Челлендж выполнен!</h2><div class="challenge-name" id="challengeUnlockName">Название челленджа</div><p id="challengeUnlockMessage">Поздравляю, вы выполнили челлендж!</p><div class="challenge-title" id="challengeUnlockTitle">Получен титул!</div><button class="btn" type="button" id="challengeUnlockClose">Забрать титул</button></div></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
-(function(){
-  'use strict';
-  const $ = id => document.getElementById(id);
-  const KEY = 'lookgramClickUpgradeStateV1';
-  const powerCosts = [50,100,200,300,350,400,500,550,700,1000];
-  const limitLevels = [
-    {value:750,cost:100},{value:1000,cost:150},
-    {value:1250,cost:250},{value:1500,cost:500},
-    {value:2000,cost:750},{value:2500,cost:1000}
-  ];
-  const resetLevels = [
-    {label:'4 ч 30 мин',minutes:270,cost:200},
-    {label:'4 часа',minutes:240,cost:300},
-    {label:'3 часа',minutes:180,cost:400},
-    {label:'2 часа',minutes:120,cost:600}
-  ];
-  const autoLevels = [
-    {label:'1 клик/с',seconds:1,cost:2000},
-    {label:'0,8 с/клик',seconds:.8,cost:500},
-    {label:'0,6 с/клик',seconds:.6,cost:750},
-    {label:'0,4 с/клик',seconds:.4,cost:1000},
-    {label:'0,1 с/клик',seconds:.1,cost:2000}
-  ];
-  let state = {power:0,limit:0,reset:0,auto:-1};
-  let autoTimer = null;
-  try {
-    const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
-    if (saved && typeof saved === 'object') state = {...state,...saved};
-  } catch (_) {}
+(()=>{'use strict';
+const $=id=>document.getElementById(id);const BASE_CLICKS=500,BASE_COOLDOWN=5*60*60*1000,MAX_REWARD=100000;
+const listedCosts=[250,500,750,900,1250,1500,1750,2000];
+// Use the exact prices supplied by the user; after the listed tiers, keep the final listed price as the cap.
+const costs=Array.from({length:18},(_,i)=>listedCosts[i%listedCosts.length]);
+const defaults={balance:0,totalClicks:0,cycleClicks:0,cycleStartedAt:0,baseReward:1,adminRewardActive:false,upgradeLevel:0,limitLevel:0,cooldownLevel:0,autoSpeedLevel:0,totalEarned:0,totalSpent:0,autoBought:false,autoEnabled:false,sound:true,vibration:false,achievements:[],dailyClaimDate:'',activeTitle:''};
+let state={...defaults};try{const saved=JSON.parse(localStorage.getItem('lookgramClicker500_v1')||'{}');state={...state,...saved};}catch(e){}
+state.baseReward=Math.max(1,Math.min(100000,Math.floor(Number(state.baseReward)||1)));state.adminRewardActive=state.adminRewardActive===true;state.upgradeLevel=Math.max(0,Math.min(18,Number(state.upgradeLevel)||0));state.limitLevel=Math.max(0,Math.min(5,Number(state.limitLevel)||0));state.cooldownLevel=Math.max(0,Math.min(8,Number(state.cooldownLevel)||0));state.autoSpeedLevel=Math.max(0,Math.min(9,Number(state.autoSpeedLevel)||0));state.balance=Math.max(0,Number(state.balance)||0);state.totalEarned=Math.max(0,Number(state.totalEarned)||0);state.totalSpent=Math.max(0,Math.floor(Number(state.totalSpent)||0));state.totalClicks=Math.max(0,Math.floor(Number(state.totalClicks)||0));state.cycleClicks=Math.max(0,Number(state.cycleClicks)||0);state.achievements=Array.isArray(state.achievements)?state.achievements:[];state.dailyClaimDate=typeof state.dailyClaimDate==='string'?state.dailyClaimDate:'';state.activeTitle=typeof state.activeTitle==='string'?state.activeTitle:'';if(!state.cycleStartedAt&&state.cycleClicks>=BASE_CLICKS+state.limitLevel*250)state.cycleClicks=0;
+const fmt=n=>Number(Number(n)||0).toLocaleString('ru-RU',{minimumFractionDigits:0,maximumFractionDigits:2});const int=n=>Math.floor(Number(n)||0).toLocaleString('ru-RU');const money=n=>Number(Number(n)||0).toLocaleString('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2});const power=()=>state.adminRewardActive?Math.min(MAX_REWARD,Math.floor(state.baseReward)):Math.min(1,Math.round((0.1+Math.min(18,state.upgradeLevel)*0.05)*100)/100);const maxClicks=()=>Math.min(1500,BASE_CLICKS+state.limitLevel*250);const cooldownMs=()=>BASE_COOLDOWN-state.cooldownLevel*30*60*1000;const autoInterval=()=>Math.max(100,1000-state.autoSpeedLevel*100);const upgradeCost=level=>listedCosts[Math.min(Math.max(0,level),listedCosts.length-1)];let toastTimer=0,autoTimer=0;
+function save(){try{localStorage.setItem('lookgramClicker500_v1',JSON.stringify(state));}catch(e){}}
+function toast(msg){const el=$('toast');el.textContent=msg;el.classList.remove('hiding');el.classList.remove('show');void el.offsetWidth;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{el.classList.add('hiding');el.classList.remove('show');setTimeout(()=>el.classList.remove('hiding'),320)},2800)}
+function go(tab){document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id==='screen-'+tab));document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));window.scrollTo({top:0,behavior:'smooth'});if(tab==='rating')renderRating();if(tab==='rewards'||tab==='achievements'||tab==='titles')renderAchievements();if(tab==='profile')renderProfile();}
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.tab)));document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.goto)));
+function ensureCycle(){const now=Date.now();if(state.cycleStartedAt&&now-state.cycleStartedAt>=cooldownMs()){state.cycleStartedAt=0;state.cycleClicks=0;save();}}
+function remainingMs(){if(!state.cycleStartedAt)return cooldownMs();return Math.max(0,cooldownMs()-(Date.now()-state.cycleStartedAt));}
+function clock(ms){const sec=Math.ceil(ms/1000);return [Math.floor(sec/3600),Math.floor(sec%3600/60),sec%60].map(n=>String(n).padStart(2,'0')).join(':')}
+function render(){ensureCycle();const p=power(),limit=maxClicks(),left=Math.max(0,limit-state.cycleClicks);$('headerBalance').textContent=fmt(state.balance);$('heroBalance').textContent=fmt(state.balance)+' КЛИКИ';$('clickReward').textContent='+'+fmt(p)+' КЛИКИ';$('clickCount').textContent=int(state.cycleClicks);$('mainClickLimit').textContent=int(limit)+' кликов';$('clickRemaining').textContent=int(left);$('tapPower').textContent=fmt(p)+' КЛИКИ';$('resetTimer').textContent=state.cycleStartedAt?clock(remainingMs()):clock(cooldownMs());$('clickMeter').style.width=(Math.max(0,Math.min(100,left/limit*100)))+'%';$('totalClicks').textContent=int(state.totalClicks);$('totalEarned').textContent=fmt(state.totalEarned)+' КЛИКИ';$('totalSpent').textContent=fmt(state.totalSpent)+' КЛИКИ';$('autoStatus').textContent=state.autoBought?(state.autoEnabled?'Работает':'Куплен · выключен'):'Не куплен';$('upgradePower').textContent=fmt(p)+' КЛИКИ';$('upgradeLevel').textContent='УРОВЕНЬ '+state.upgradeLevel+' / 18';$('powerCurrent').textContent=fmt(p)+' КЛИКИ';$('powerNext').textContent=fmt(Math.min(state.adminRewardActive?MAX_REWARD:1,Math.round((p+0.05)*100)/100))+' КЛИКИ';$('powerDesc').textContent=state.adminRewardActive?'Активна отдельная админская награда':state.upgradeLevel>=18?'Достигнут максимум обычного улучшения — 1 КЛИК':'Следующий уровень: +0,05 КЛИКА за нажатие';$('buyPower').textContent=state.adminRewardActive?'АДМИНСКАЯ НАГРАДА':state.upgradeLevel>=18?'МАКСИМУМ':('Купить · '+int(costs[state.upgradeLevel]||0)+' КЛИКИ');$('buyPower').disabled=state.adminRewardActive||state.upgradeLevel>=18;$('buyAuto').textContent=state.autoBought?'КУПЛЕН':'Разблокировать · 2 000 КЛИКИ';$('buyAuto').disabled=state.autoBought;$('autoTag').textContent=state.autoBought?(state.autoEnabled?'РАБОТАЕТ':'КУПЛЕН'):'НЕ КУПЛЕН';$('toggleAuto').disabled=!state.autoBought;$('toggleAuto').textContent=state.autoEnabled?'ОСТАНОВИТЬ АВТОКЛИКЕР':'ЗАПУСТИТЬ АВТОКЛИКЕР';$('autoRemaining').textContent=int(left);$('limitTag').textContent=int(limit)+' КЛИКОВ';$('limitCurrent').textContent=int(limit)+' кликов';$('limitNext').textContent=state.limitLevel>=5?'МАКСИМУМ':int(limit+250)+' кликов';$('buyLimit').textContent=state.limitLevel>=5?'МАКСИМУМ':'Купить · '+int(upgradeCost(state.limitLevel))+' КЛИКИ';$('buyLimit').disabled=state.limitLevel>=5;$('limitDesc').textContent=state.limitLevel>=5?'Достигнут максимальный лимит 1 500 кликов за цикл.':'Каждый уровень добавляет 250 кликов к лимиту. Обновление каждые 5 часов.';$('cooldownTag').textContent=clock(cooldownMs());$('cooldownCurrent').textContent=clock(cooldownMs());$('cooldownNext').textContent=state.cooldownLevel>=8?'МАКСИМУМ':clock(cooldownMs()-1800000);$('buyCooldown').textContent=state.cooldownLevel>=8?'МАКСИМУМ':'Купить · '+int(upgradeCost(state.cooldownLevel))+' КЛИКИ';$('buyCooldown').disabled=state.cooldownLevel>=8;$('cooldownDesc').textContent=state.cooldownLevel>=8?'Минимальная перезарядка — 1 час.':'Следующий уровень сократит ожидание на 30 минут.';$('autoSpeed').textContent=(autoInterval()/1000).toFixed(1).replace('.',',')+' сек. на клик';$('buyAutoSpeed').textContent=state.autoSpeedLevel>=9?'МАКСИМУМ':'Улучшить · '+int(upgradeCost(state.autoSpeedLevel))+' КЛИКИ';$('buyAutoSpeed').disabled=!state.autoBought||state.autoSpeedLevel>=9;$('autoSpeedDesc').textContent=!state.autoBought?'Сначала купи автокликер.':state.autoSpeedLevel>=9?'Достигнут минимум 0,1 секунды на клик.':'Следующий уровень сократит интервал до '+((autoInterval()-100)/1000).toFixed(1).replace('.',',')+' секунды.';$('profileBalance').textContent=fmt(state.balance)+' КЛИКИ';$('profileClicks').textContent=int(state.totalClicks);$('profilePower').textContent=fmt(p)+' КЛИКИ';$('profileUpgrades').textContent=int(state.upgradeLevel+state.limitLevel+state.cooldownLevel+state.autoSpeedLevel+(state.autoBought?1:0));$('profileEarned').textContent=fmt(state.totalEarned);$('profileSpent').textContent=fmt(state.totalSpent);renderProfile();$('adminReward').value=String(Math.floor(state.baseReward));$('soundSetting').checked=!!state.sound;$('vibrationSetting').checked=!!state.vibration;renderRating();renderAchievements();}
+let exchangeActive=false,exchangeMultiplier=1,exchangeTimer=0,exchangeTickTimer=0,exchangeTickLeft=15;function weightedMarketMultiplier(){return Math.round((0.01+9.99*Math.pow(Math.random(),3.6))*100)/100}function marketRender(){const panel=$('clickExchangePanel');if(!panel)return;$('marketMultiplier').textContent=exchangeMultiplier.toFixed(2).replace('.',',')+'×';$('marketMultiplier').classList.toggle('hot',exchangeMultiplier>=3);$('marketStatusTag').textContent=exchangeActive?'● ТОРГИ ИДУТ':'● ОЖИДАНИЕ';$('marketStatusTag').style.color=exchangeActive?'#83e7b1':'#c7a5bb';$('marketTrackFill').style.width=(exchangeMultiplier/10*100)+'%';$('marketNextReward').textContent=money(power()*exchangeMultiplier)+' КЛИКИ';$('marketCountdown').textContent=exchangeActive?exchangeTickLeft+' сек.':'—';$('marketMessage').textContent=exchangeActive?'КУРС ОБНОВЛЯЕТСЯ · КЛИКАЙ СЕЙЧАС':'БИРЖА ОСТАНОВЛЕНА';$('toggleClickExchange').textContent=exchangeActive?'■ ОСТАНОВИТЬ БИРЖУ':'▶ ВКЛЮЧИТЬ БИРЖУ';}function marketTick(){if(!exchangeActive)return;exchangeMultiplier=weightedMarketMultiplier();exchangeTickLeft=15;marketRender();}function startExchange(){if(exchangeActive)return;exchangeActive=true;exchangeMultiplier=weightedMarketMultiplier();exchangeTickLeft=15;clearInterval(exchangeTimer);clearInterval(exchangeTickTimer);exchangeTimer=setInterval(marketTick,15000);exchangeTickTimer=setInterval(()=>{if(exchangeActive){exchangeTickLeft=exchangeTickLeft<=1?15:exchangeTickLeft-1;marketRender()}},1000);marketRender();toast('📈 Биржа кликов включена')}function stopExchange(){exchangeActive=false;clearInterval(exchangeTimer);clearInterval(exchangeTickTimer);exchangeTimer=exchangeTickTimer=0;exchangeMultiplier=1;exchangeTickLeft=15;marketRender();toast('Биржа кликов остановлена')}function clickOnce(isAuto=false){ensureCycle();if(!isAuto){const now=Date.now();recentManualClicks=recentManualClicks.filter(t=>now-t<60000);recentManualClicks.push(now);if(recentManualClicks.length>=1000)challengeFlags.overdrive=true;}if(state.cycleClicks>=maxClicks()){if(!isAuto)toast('Лимит '+int(maxClicks())+' кликов исчерпан. Обновление через '+clock(remainingMs()));if(state.autoEnabled){state.autoEnabled=false;clearInterval(autoTimer);autoTimer=0;save();render()}return false;}const rawAmount=power()*(exchangeActive?exchangeMultiplier:1);const amount=Math.round(rawAmount*100)/100;state.cycleClicks++;state.totalClicks++;state.balance=Math.round((state.balance+amount)*100)/100;state.totalEarned=Math.round((state.totalEarned+amount)*100)/100;if(!state.cycleStartedAt)state.cycleStartedAt=Date.now();if(state.sound&&!isAuto)beep();if(state.vibration&&navigator.vibrate&&!isAuto)navigator.vibrate(12);save();render();checkAchievements();return true;}
+let coinAudio=null;function beep(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!coinAudio)coinAudio=new C();const c=coinAudio;if(c.state==='suspended')c.resume();const t=c.currentTime;function note(freq,start,duration,volume,type){const o=c.createOscillator(),g=c.createGain();o.type=type||'sine';o.frequency.setValueAtTime(freq,t+start);o.frequency.exponentialRampToValueAtTime(freq*1.12,t+start+duration*.55);g.gain.setValueAtTime(.0001,t+start);g.gain.exponentialRampToValueAtTime(volume,t+start+.008);g.gain.exponentialRampToValueAtTime(.0001,t+start+duration);o.connect(g);g.connect(c.destination);o.start(t+start);o.stop(t+start+duration+.015)}note(880,0,.095,.016,'sine');note(1320,.018,.13,.008,'triangle');note(1760,.025,.075,.003,'sine')}catch(e){}}
+const beyondZone=$('beyondZone'),vacuumRift=$('vacuumRift');const darkness=$('descentDarkness');function updateDescentDarkness(){if(!darkness||!beyondZone)return;const onClicker=$('screen-tap')?.classList.contains('active');if(!onClicker){darkness.style.opacity='0';stopVacuumSound();return}const target=vacuumRift||beyondZone;const top=target.getBoundingClientRect().top;const progress=Math.max(0,Math.min(1,1-top/(innerHeight*2.6)));darkness.style.opacity=String((progress*0.82).toFixed(3));}window.addEventListener('scroll',updateDescentDarkness,{passive:true});window.addEventListener('resize',updateDescentDarkness);document.querySelectorAll('[data-tab],[data-goto]').forEach(b=>b.addEventListener('click',()=>setTimeout(updateDescentDarkness,280)));updateDescentDarkness();
+// Suction ambience follows visibility. Any first touch/scroll unlocks WebAudio, but sound starts only while the tear is visible.
+let vacuumAudio=null,vacuumGain=null,vacuumNoise=null,vacuumOsc=null,vacuumSoundWanted=false;
+function prepareVacuumAudio(){if(vacuumAudio)return vacuumAudio;try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;const c=new AC();vacuumAudio=c;const master=c.createGain();master.gain.value=.0001;master.connect(c.destination);vacuumGain=master;const length=c.sampleRate*4,buffer=c.createBuffer(1,length,c.sampleRate),data=buffer.getChannelData(0);let smooth=0;for(let i=0;i<length;i++){smooth=smooth*.88+(Math.random()*2-1)*.12;data[i]=((Math.random()*2-1)*.72+smooth*1.8)*(.45+.55*Math.sin(i/c.sampleRate*1.15));}const noise=c.createBufferSource();noise.buffer=buffer;noise.loop=true;const low=c.createBiquadFilter();low.type='lowpass';low.frequency.value=240;low.Q.value=.8;const rumble=c.createBiquadFilter();rumble.type='lowshelf';rumble.frequency.value=130;rumble.gain.value=8;const ng=c.createGain();ng.gain.value=.75;noise.connect(low);low.connect(rumble);rumble.connect(ng);ng.connect(master);const hiss=c.createBufferSource();hiss.buffer=buffer;hiss.loop=true;const band=c.createBiquadFilter();band.type='bandpass';band.frequency.value=950;band.Q.value=.45;const hg=c.createGain();hg.gain.value=.16;hiss.connect(band);band.connect(hg);hg.connect(master);const lfo=c.createOscillator(),lfoGain=c.createGain();lfo.type='sine';lfo.frequency.value=.19;lfoGain.gain.value=100;lfo.connect(lfoGain);lfoGain.connect(band.frequency);const osc=c.createOscillator(),og=c.createGain();osc.type='sine';osc.frequency.value=39;og.gain.value=.075;osc.connect(og);og.connect(master);noise.start();hiss.start();lfo.start();osc.start();vacuumNoise=[noise,hiss,low,rumble,band,ng,hg,lfo,lfoGain];vacuumOsc=[osc,og];return c}catch(e){return null}}
+function startVacuumSound(){const c=prepareVacuumAudio();if(!c||!vacuumGain)return;const activate=()=>{const now=c.currentTime;vacuumGain.gain.cancelScheduledValues(now);vacuumGain.gain.setValueAtTime(Math.max(.0001,vacuumGain.gain.value),now);vacuumGain.gain.linearRampToValueAtTime(.15,now+.045)};if(c.state==='suspended')c.resume().then(activate).catch(()=>{});else activate()}
+function stopVacuumSound(){if(!vacuumAudio||!vacuumGain)return;vacuumGain.gain.cancelScheduledValues(vacuumAudio.currentTime);vacuumGain.gain.setTargetAtTime(.0001,vacuumAudio.currentTime,.25)}
+function unlockVacuumAudio(){const c=prepareVacuumAudio();if(c&&c.state==='suspended')c.resume().then(()=>{if(vacuumSoundWanted)startVacuumSound()}).catch(()=>{});else if(vacuumSoundWanted)startVacuumSound()}
+window.addEventListener('pointerdown',unlockVacuumAudio,{passive:true});window.addEventListener('touchstart',unlockVacuumAudio,{passive:true});window.addEventListener('keydown',unlockVacuumAudio);window.addEventListener('pageshow',()=>{if(vacuumSoundWanted)startVacuumSound()});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&vacuumSoundWanted)startVacuumSound()});
+// Attempt autoplay immediately and again whenever the rift becomes visible. Browsers that permit autoplay will start without interaction; Android may still block audio until its first gesture.
+function attemptVacuumAutoplay(){if(!vacuumRift)return;const r=vacuumRift.getBoundingClientRect();vacuumSoundWanted=r.bottom>0&&r.top<innerHeight;if(vacuumSoundWanted)startVacuumSound();else prepareVacuumAudio()?.resume().catch(()=>{});}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',attemptVacuumAutoplay,{once:true});else attemptVacuumAutoplay();
+function syncVacuumVisibility(){if(!vacuumRift)return;const r=vacuumRift.getBoundingClientRect();const visible=r.bottom>0&&r.top<innerHeight&&Math.min(r.bottom,innerHeight)-Math.max(r.top,0)>8;vacuumSoundWanted=visible;if(visible)startVacuumSound();else stopVacuumSound()}window.addEventListener('scroll',syncVacuumVisibility,{passive:true});window.addEventListener('resize',syncVacuumVisibility);if(vacuumRift&&'IntersectionObserver'in window){const vacuumObserver=new IntersectionObserver(()=>syncVacuumVisibility(),{threshold:[0,.01,.08,.18,.35]});vacuumObserver.observe(vacuumRift)}
+if(beyondZone&&'IntersectionObserver'in window){const beyondObserver=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)&&!state.achievements.includes('beyond')){state.achievements.push('beyond');state.activeTitle='Глитч';save();renderAchievements();renderProfile();$('leaderSecretButton').hidden=false;toast('Поздравляем, вы выполнили секретное достижение «За гранью»!');beyondObserver.disconnect()}},{threshold:.35});beyondObserver.observe(beyondZone)}else if(beyondZone){let beyondUnlocked=false;window.addEventListener('scroll',()=>{if(!beyondUnlocked&&beyondZone.getBoundingClientRect().top<innerHeight*.7){beyondUnlocked=true;if(!state.achievements.includes('beyond')){state.achievements.push('beyond');state.activeTitle='Глитч';save();renderAchievements();renderProfile();$('leaderSecretButton').hidden=false;toast('Поздравляем, вы выполнили секретное достижение «За гранью»!')}}},{passive:true})}
+$('coinButton').addEventListener('click',()=>clickOnce(false));
+$('buyPower').addEventListener('click',()=>{if(state.adminRewardActive){toast('Установи 1 в админ-панели, чтобы вернуться к обычным улучшениям');return}if(state.upgradeLevel>=18){toast('Достигнут максимум обычного улучшения');return}const p=power();const cost=costs[state.upgradeLevel];if(state.balance<cost){toast('Недостаточно КЛИКОВ · нужно '+int(cost)+' КЛИКИ');return}state.balance=Math.max(0,Math.floor(state.balance-cost));state.totalSpent=Math.floor(state.totalSpent+cost);state.upgradeLevel++;save();render();checkAchievements();toast('КЛИКОВ за нажатие: '+fmt(power())+' КЛИКИ')});
+function chargeUpgrade(cost,label){if(state.balance<cost){toast('Недостаточно КЛИКОВ · нужно '+int(cost)+' КЛИКИ');return false}state.balance=Math.max(0,Math.floor(state.balance-cost));state.totalSpent=Math.floor(state.totalSpent+cost);return true;}
+$('buyLimit').addEventListener('click',()=>{if(state.limitLevel>=5)return;const cost=upgradeCost(state.limitLevel);if(!chargeUpgrade(cost,'лимит'))return;state.limitLevel++;save();render();checkAchievements();toast('Лимит увеличен до '+int(maxClicks())+' кликов за цикл');});
+$('buyCooldown').addEventListener('click',()=>{if(state.cooldownLevel>=8)return;const cost=upgradeCost(state.cooldownLevel);if(!chargeUpgrade(cost,'перезарядка'))return;state.cooldownLevel++;ensureCycle();save();render();checkAchievements();toast('Перезарядка сокращена до '+clock(cooldownMs()));});
+$('buyAutoSpeed').addEventListener('click',()=>{if(!state.autoBought){toast('Сначала купи автокликер');return}if(state.autoSpeedLevel>=9)return;const cost=upgradeCost(state.autoSpeedLevel);if(!chargeUpgrade(cost,'скорость'))return;state.autoSpeedLevel++;if(state.autoEnabled)setAuto(true);save();render();checkAchievements();toast('Интервал автокликера: '+(autoInterval()/1000).toFixed(1).replace('.',',')+' сек.');});
+$('buyAuto').addEventListener('click',()=>{if(state.autoBought)return;const cost=2000;if(state.balance<cost){toast('Для разблокировки автокликера нужно 2 000 КЛИКИ');return}state.balance=Math.max(0,Math.floor(state.balance-cost));state.totalSpent=Math.floor(state.totalSpent+cost);state.autoBought=true;state.autoEnabled=false;save();render();checkAchievements();toast('Автокликер куплен')});
+function setAuto(on){state.autoEnabled=!!on&&state.autoBought&&state.cycleClicks<maxClicks();clearInterval(autoTimer);autoTimer=0;if(state.autoEnabled)autoTimer=setInterval(()=>{if(!clickOnce(true)){state.autoEnabled=false;clearInterval(autoTimer);autoTimer=0;save();render();}},autoInterval());save();render();toast(state.autoEnabled?'Автокликер запущен':'Автокликер остановлен')}
+$('toggleAuto').addEventListener('click',()=>setAuto(!state.autoEnabled));
+$('soundSetting').addEventListener('change',e=>{state.sound=e.target.checked;save();toast('Настройка звука сохранена')});$('vibrationSetting').addEventListener('change',e=>{state.vibration=e.target.checked;save();toast('Настройка вибрации сохранена')});
+$('saveAdminReward').addEventListener('click',()=>{let v=Number($('adminReward').value);if(!Number.isFinite(v)||!Number.isInteger(v)||v<1||v>100000){toast('Укажи целое число от 1 до 100 000');$('adminReward').value=String(state.baseReward);return}state.baseReward=Math.floor(v);state.adminRewardActive=v>1;save();render();toast(state.adminRewardActive?'Админская награда активна':'Включён обычный режим улучшений')});
+$('testNotification')?.addEventListener('click',()=>toast('LOOKGRAM · Уведомление проверено'));
+$('resetProgress').addEventListener('click',()=>{if(exchangeActive)stopExchange();if(!confirm('Сбросить баланс, клики и улучшения на этом устройстве?'))return;clearInterval(autoTimer);autoTimer=0;state={...defaults,achievements:[]};sessionStorage.removeItem('lg_leader_access');$('leaderSecretButton').hidden=true;$('upgradeSecretPanel').hidden=true;$('upgradeGlitchButton').hidden=false;save();render();toast('Локальный прогресс сброшен')});
+const defs=[
+{id:'first-click',category:'ordinary',name:'Первый клик',desc:'Совершите первый клик.',icon:'👆',check:()=>state.totalClicks>=1},
+{id:'warmup',category:'ordinary',name:'Разминка',desc:'Совершите 100 кликов за всё время.',icon:'✨',check:()=>state.totalClicks>=100},
+{id:'clicker',category:'ordinary',name:'Кликер',desc:'Совершите 1 000 кликов за всё время.',icon:'🖱️',check:()=>state.totalClicks>=1000},
+{id:'first-profit',category:'ordinary',name:'Первая прибыль',desc:'Заработайте 100 луккоинов за всё время.',icon:'🪙',check:()=>state.totalEarned>=100},
+{id:'collector',category:'ordinary',name:'Накопитель',desc:'Заработайте 1 000 луккоинов за всё время.',icon:'💰',check:()=>state.totalEarned>=1000},
+{id:'first-upgrade',category:'ordinary',name:'Первая покупка',desc:'Купите первое улучшение.',icon:'🛠️',check:()=>state.totalSpent>0},
+{id:'upgrader',category:'ordinary',name:'Улучшатель',desc:'Достигните 10 уровней улучшений суммарно.',icon:'⚙️',check:()=>state.upgradeLevel+state.limitLevel+state.cooldownLevel+state.autoSpeedLevel>=10},
+{id:'auto',category:'ordinary',name:'Автоматизация',desc:'Купите автокликер.',icon:'🤖',check:()=>state.autoBought},
+{id:'experienced',category:'ordinary',name:'Опытный кликер',desc:'Совершите 10 000 кликов за всё время.',icon:'🚀',check:()=>state.totalClicks>=10000},
+{id:'buyer',category:'challenges',name:'Покупаю!',title:'Максимум',desc:'Купите все улучшения до максимального уровня.',icon:'🛍️',check:()=>shopFullyBought()},
+{id:'challenge-collector',category:'challenges',name:'Коллекционер!',title:'Коллекционер',desc:'Соберите все титулы и достижения.',icon:'🏆',check:()=>allOtherProgressComplete()},
+{id:'overdrive',category:'challenges',name:'Овердрайв',title:'Овер драйв',desc:'Совершите 1 000 кликов за одну минуту.',icon:'⚡',check:()=>challengeFlags.overdrive},
+{id:'beyond',category:'secret',name:'За гранью',title:'Глитч',desc:'',icon:'🧩',secret:true,check:()=>false},
+{id:'og',category:'secret',name:'Знакомо до боли..',title:'OG',desc:'',icon:'📼',secret:true,check:()=>false},
+{id:'creature',category:'secret',name:'Спасибо',title:'Существо',desc:'',icon:'🕳️',secret:true,check:()=>false}
+];
+const challengeFlags={overdrive:false};let recentManualClicks=[];let achievementCategory='ordinary';
+if(localStorage.getItem('lookgram_achievement_reset_v3')!=='1'){state.achievements=[];state.activeTitle='';try{sessionStorage.removeItem('lg_leader_access')}catch(e){}save();try{localStorage.setItem('lookgram_achievement_reset_v3','1')}catch(e){}}
+function shopFullyBought(){const powerMax=state.upgradeLevel>=18;const limitMax=state.limitLevel>=5;const cooldownMax=state.cooldownLevel>=8;const autoMax=state.autoBought&&state.autoSpeedLevel>=9;return powerMax&&limitMax&&cooldownMax&&autoMax}
+function allOtherProgressComplete(){const normal=defs.filter(a=>a.category==='ordinary').every(a=>state.achievements.includes(a.id));const challenges=defs.filter(a=>a.category==='challenges'&&a.id!=='challenge-collector').every(a=>state.achievements.includes(a.id));const secrets=defs.filter(a=>a.category==='secret').every(a=>state.achievements.includes(a.id));return normal&&challenges&&secrets}
+function showChallengeCompletion(a){const modal=$('challengeUnlock');$('challengeUnlockIcon').textContent=a.icon||'🏆';$('challengeUnlockName').textContent=a.name;$('challengeUnlockMessage').textContent='Поздравляю, вы выполнили челлендж «'+a.name+'»!';$('challengeUnlockTitle').textContent='Получен титул «'+a.title+'»!';modal.classList.add('open');}
+$('challengeUnlockClose').addEventListener('click',()=>$('challengeUnlock').classList.remove('open'));
+function checkAchievements(){let changed=false;for(const a of defs){if(a.check()&&!state.achievements.includes(a.id)){state.achievements.push(a.id);changed=true;if(a.category==='challenges'){state.activeTitle=a.title;showChallengeCompletion(a)}else if(!a.secret){toast('🏆 Достижение открыто: '+a.name)}}}if(changed)save();renderAchievements();renderProfile()}
+function renderAchievements(){const list=$('achievementList');let got=0;const visible=defs.filter(a=>a.category===achievementCategory);if(list){list.innerHTML='';for(const a of visible){const done=state.achievements.includes(a.id);if(done)got++;const row=document.createElement('div');row.className='reward-card'+(done?' unlocked':'');const titleText=a.category==='challenges'&&done?'<small class="status">ТИТУЛ: '+a.title+'</small>':'';row.innerHTML='<div class="reward-head"><div class="reward-symbol">'+a.icon+'</div><div class="reward-info"><b>'+a.name+(done?' <span class="status">ОТКРЫТО</span>':' <span class="tag">ЗАКРЫТО</span>')+'</b><small>'+(a.secret?'':a.desc)+'</small>'+titleText+'</div></div><div class="ach-progress" style="height:5px;background:#30202f;border-radius:99px;margin-top:10px;overflow:hidden"><span style="display:block;height:100%;width:'+(done?100:0)+'%;background:linear-gradient(90deg,#a8173e,#ff8299);border-radius:99px"></span></div><small style="display:block;color:#a991a4;font-size:9px;margin-top:5px">'+(done?'Выполнено':'Не выполнено')+'</small>';list.appendChild(row)}}
+const counts={ordinary:defs.filter(a=>a.category==='ordinary'&&state.achievements.includes(a.id)).length,challenges:defs.filter(a=>a.category==='challenges'&&state.achievements.includes(a.id)).length,secret:defs.filter(a=>a.category==='secret'&&state.achievements.includes(a.id)).length};$('ordinaryCount').textContent=counts.ordinary+'/'+defs.filter(a=>a.category==='ordinary').length;$('challengeCount').textContent=counts.challenges+'/'+defs.filter(a=>a.category==='challenges').length;$('secretCount').textContent=counts.secret+'/'+defs.filter(a=>a.category==='secret').length;$('achievementTotal').textContent=state.achievements.filter(id=>defs.some(a=>a.id===id)).length+' / '+defs.length;$('achievementMenuCount').textContent='Открыто: '+state.achievements.filter(id=>defs.some(a=>a.id===id)).length;
+$('titlesMenuCount').textContent=unlockedTitles().length?'Открыто: '+unlockedTitles().join(', '):'Титулы ещё не добавлены';$('titlesCurrent').textContent=state.activeTitle||'Не выбран';const titlesNotice=document.querySelector('#screen-titles .notice');if(titlesNotice){const ts=unlockedTitles();titlesNotice.innerHTML=ts.length?'Доступные титулы: '+ts.map(t=>'<button type="button" class="price" data-select-title="'+t+'" style="margin:5px 5px 0 0">'+t+(state.activeTitle===t?' ✓':'')+'</button>').join(''):'Пока нет открытых титулов.';titlesNotice.querySelectorAll('[data-select-title]').forEach(b=>b.addEventListener('click',()=>{state.activeTitle=b.dataset.selectTitle;save();renderAchievements();renderProfile();renderRating();toast('Титул «'+state.activeTitle+'» выбран')}))}}
+function unlockedTitles(){return [...new Set(defs.filter(a=>a.title&&state.achievements.includes(a.id)).map(a=>a.title))]}
+document.querySelectorAll('[data-ach-category]').forEach(b=>b.addEventListener('click',()=>{achievementCategory=b.dataset.achCategory;document.querySelectorAll('[data-ach-category]').forEach(x=>x.classList.toggle('active',x===b));renderAchievements()}));
+function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function claimDaily(){const today=todayKey();if(state.dailyClaimDate===today){toast('Ежедневный бонус уже получен. Возвращайся завтра.');return}state.dailyClaimDate=today;state.balance+=50;state.totalEarned+=50;save();render();renderAchievements();toast('🎁 Получено +50 КЛИКОВ!')}
+$('claimDaily').addEventListener('click',claimDaily);$('openAchievements').addEventListener('click',()=>{renderAchievements();go('achievements')});$('openTitles').addEventListener('click',()=>{renderAchievements();go('titles')});
+function renderProfile(){const level=Math.floor(Math.max(0,state.totalClicks)/1000)+1;const current=state.totalClicks%1000;$('profileLevel').textContent='УРОВЕНЬ '+int(level);$('profileXpText').textContent=int(current)+' / 1 000 XP';$('profileXpBar').style.width=(current/1000*100)+'%';$('profileNextLevel').textContent='До следующего уровня: '+int(1000-current)+' XP';$('profileTitle').textContent=state.activeTitle?'✦ '+state.activeTitle:'✦ Без титула';$('profileBalance').textContent=fmt(state.balance);$('profileClicks').textContent=int(state.totalClicks);$('profilePower').textContent=fmt(power());$('profileUpgrades').textContent=int(state.upgradeLevel+state.limitLevel+state.cooldownLevel+state.autoSpeedLevel+(state.autoBought?1:0));$('profileEarned').textContent=fmt(state.totalEarned);$('profileSpent').textContent=fmt(state.totalSpent);$('profileAchievementCount').textContent=state.achievements.filter(id=>defs.some(a=>a.id===id)).length+' / '+defs.filter(a=>!a.secret||state.achievements.includes(a.id)).length}
+$('requestWithdraw').addEventListener('click',()=>{const tg=window.Telegram&&window.Telegram.WebApp;const amount=Math.round(state.balance*100)/100;if(!tg||typeof tg.sendData!=='function'){toast('Открой Mini App через кнопку в Telegram');return}if(amount<0.01){toast('Нет КЛИКОВ для зачисления');return}tg.sendData(JSON.stringify({action:'clicker_transfer',amount}));toast('Запрос отправлен. Проверь ответ бота перед дальнейшими действиями.')});
+// OG legacy interface: hidden corner button in profile settings; legacy has only Clicker and Settings.
+function goLegacy(tab){document.querySelectorAll('.legacy-screen').forEach(x=>x.classList.toggle('active',x.id==='legacy-'+tab));document.querySelectorAll('[data-legacy-tab]').forEach(x=>x.classList.toggle('active',x.dataset.legacyTab===tab));window.scrollTo({top:0,behavior:'smooth'})}
+$('openLegacyMode').addEventListener('click',()=>{if(!state.achievements.includes('og')){state.achievements.push('og');state.activeTitle='OG';save();renderAchievements();renderProfile();toast('Поздравляем, вы выполнили секретное достижение «Знакомо до боли..»!')}document.body.classList.add('legacy-active');goLegacy('clicker')});$('returnNewInterface').addEventListener('click',()=>{document.body.classList.remove('legacy-active');go('profile')});document.querySelectorAll('[data-legacy-tab]').forEach(b=>b.addEventListener('click',()=>goLegacy(b.dataset.legacyTab)));
 
-  function save(){
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) {}
-  }
-  function row(icon,title,desc,cost,disabled,onClick){
-    const el = document.createElement('div');
-    el.className = 'upgrade-row';
-    const ico = document.createElement('div');
-    ico.className = 'upgrade-icon'; ico.textContent = icon;
-    const copy = document.createElement('div');
-    copy.className = 'upgrade-copy';
-    const b = document.createElement('b'); b.textContent = title;
-    const small = document.createElement('small'); small.textContent = desc;
-    copy.append(b,small);
-    const btn = document.createElement('button');
-    btn.className = 'upgrade-buy';
-    btn.textContent = disabled ? 'МАКС.' : '🪙 ' + cost;
-    btn.disabled = true;
-    btn.title = 'Покупки включим после подключения серверного списания Луккоинов';
-    el.append(ico,copy,btn);
-    return el;
-  }
-  function renderRows(){
-    const power = $('clickPowerUpgrades');
-    const limit = $('clickLimitUpgrades');
-    const reset = $('resetUpgrades');
-    const auto = $('autoClickerUpgrades');
-    if (!power || !limit || !reset || !auto) return;
-    power.replaceChildren(); limit.replaceChildren();
-    reset.replaceChildren(); auto.replaceChildren();
-
-    powerCosts.forEach((cost,i)=>{
-      const current = i < state.power;
-      const reward = i === 9 ? 'Доход станет ровно 1 за клик' :
-        'Награда за клик: +' + (0.1 + (i+1)*0.05).toFixed(2).replace('.',',');
-      power.append(row('⚡','Уровень '+(i+1),reward,cost,current,()=>{}));
-    });
-    limitLevels.forEach((x,i)=>{
-      limit.append(row('🎯',x.value+' кликов','Следующий лимит за цикл',x.cost,i<state.limit,()=>{}));
-    });
-    resetLevels.forEach((x,i)=>{
-      reset.append(row('⏱️',x.label,'Интервал сброса лимита',x.cost,i<state.reset,()=>{}));
-    });
-    autoLevels.forEach((x,i)=>{
-      auto.append(row('🤖',x.label,'Интервал автоматического клика',x.cost,i<=state.auto,()=>{}));
-    });
-
-    $('clickPowerLevel').textContent='Уровень '+state.power+'/10';
-    $('clickLimitLevel').textContent=String([500,750,1000,1250,1500,2000,2500][Math.min(state.limit,6)]);
-    $('resetLevel').textContent=state.reset ? resetLevels[Math.min(state.reset,4)-1].label : '24 часа';
-    $('autoStatus').textContent=state.auto<0?'Не куплен':(autoTimer?'Включён':'Выключен');
-    $('autoClickerToggle').disabled=state.auto<0;
-    $('autoClickerToggle').textContent=autoTimer?'■ Выключить автокликер':'▶ Включить автокликер';
-    $('upgradeClicks').textContent=$('tapTotal') ? $('tapTotal').textContent : '0';
-  }
-  function toggleAuto(){
-    if (autoTimer) {
-      clearInterval(autoTimer); autoTimer=null; renderRows(); return;
-    }
-    if (state.auto < 0) return;
-    const interval = autoLevels[Math.min(state.auto,autoLevels.length-1)].seconds*1000;
-    autoTimer = setInterval(()=>{
-      const tap = $('tapButton');
-      if (!tap || tap.disabled || document.visibilityState !== 'visible') return;
-      tap.click();
-      renderRows();
-    }, interval);
-    renderRows();
-  }
-  $('autoClickerToggle')?.addEventListener('click',toggleAuto);
-  document.addEventListener('visibilitychange',()=>{
-    if(document.visibilityState!=='visible' && autoTimer){
-      clearInterval(autoTimer); autoTimer=null; renderRows();
-    }
-  });
-  document.querySelectorAll('[data-screen]').forEach(btn=>{
-    btn.addEventListener('click',()=>setTimeout(renderRows,0));
-  });
-  const oldTapUi = window.tapUi;
-  const tapButton = $('tapButton');
-  tapButton?.addEventListener('click',()=>setTimeout(renderRows,0));
-  renderRows();
+function renderRating(){const list=$('leaderboard');if(!list)return;const players=[{name:'RedNova',score:18420},{name:'NightFox',score:15090},{name:'LunaCore',score:12600},{name:'Ты · Lookgram Player',score:state.balance,me:true}].sort((a,b)=>b.score-a.score);list.innerHTML='';let rank=0;players.forEach((p,i)=>{if(p.me)rank=i+1;const row=document.createElement('div');row.className='row';row.innerHTML='<span style="display:flex;flex-direction:column;gap:4px">'+(i===0?'🥇':i===1?'🥈':i===2?'🥉':'◉')+' '+p.name+(p.me&&state.activeTitle?'<small style="color:#ff9bb4;font-size:10px;margin-left:22px">✦ '+state.activeTitle+'</small>':'')+'</span><b>'+fmt(p.score)+' КЛИКИ</b>';if(p.me){row.style.background='#2a1726';row.style.paddingLeft='8px';row.style.paddingRight='8px';row.style.borderRadius='8px'}list.appendChild(row)});$('myRank').textContent='#'+(rank||4)}
+$('upgradeGlitchButton').addEventListener('click',()=>{if($('upgradeSecretPanel').hidden){toast('Сначала найди повреждённое меню и введи ключ в лидерах');return}const gate=$('upgradeGlitchGate');gate.classList.toggle('open');if(gate.classList.contains('open'))$('upgradeGlitchCode').focus()});$('upgradeGlitchCode').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);$('upgradeGlitchError').textContent=''});function tryUpgradeGlitch(){const input=$('upgradeGlitchCode');if(input.value==='2375'){$('upgradeGlitchGate').classList.remove('open');$('upgradeGlitchCode').value='';$('upgradeGlitchError').textContent='';$('glitchClickerMode').classList.add('open');document.body.style.overflow='hidden';}else{$('upgradeGlitchError').textContent='Фрагмент повреждён. Код не принят.';input.value='';input.focus()}}$('upgradeGlitchSubmit').addEventListener('click',tryUpgradeGlitch);$('upgradeGlitchCode').addEventListener('keydown',e=>{if(e.key==='Enter')tryUpgradeGlitch()});let glitchReleaseTimer=0,releaseSequenceTimers=[];function playGlitchSound(durationMs=3000){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=coinAudio||(coinAudio=new C());if(ctx.state==='suspended')ctx.resume();const start=ctx.currentTime,end=start+durationMs/1000,master=ctx.createGain();master.gain.setValueAtTime(.0001,start);master.gain.linearRampToValueAtTime(.19,start+.035);master.gain.setValueAtTime(.13,Math.max(start+.05,end-.24));master.gain.exponentialRampToValueAtTime(.0001,end);master.connect(ctx.destination);
+/* Original synthesized DOORS-inspired digital rupture: broadband static, metallic resonances, pitch dives and irregular hard cuts. */
+const length=Math.max(1,Math.floor(ctx.sampleRate*durationMs/1000)),buffer=ctx.createBuffer(1,length,ctx.sampleRate),data=buffer.getChannelData(0);let low=0;for(let i=0;i<length;i++){const t=i/ctx.sampleRate,fade=Math.min(1,t/.025)*Math.min(1,(durationMs/1000-t)/.12),raw=Math.random()*2-1;low=low*.82+raw*.18;const grit=(Math.random()>.965?(Math.random()*2-1)*1.8:raw*.48);data[i]=(grit+low*.72)*Math.max(0,fade)*(0.55+0.45*Math.sin(t*47));}const noise=ctx.createBufferSource();noise.buffer=buffer;const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.setValueAtTime(180,start);hp.frequency.exponentialRampToValueAtTime(1150,end*.0+start+(durationMs/1000)*.55);const bp=ctx.createBiquadFilter();bp.type='bandpass';bp.frequency.setValueAtTime(620,start);bp.frequency.exponentialRampToValueAtTime(3100,start+(durationMs/1000)*.38);bp.frequency.exponentialRampToValueAtTime(430,end);bp.Q.value=2.2;const ng=ctx.createGain();ng.gain.value=.34;noise.connect(hp);hp.connect(bp);bp.connect(ng);ng.connect(master);noise.start(start);noise.stop(end);
+for(let i=0;i<25;i++){const at=start+i*(durationMs/1000)/25+(Math.random()-.5)*.035;if(at>=end)continue;const o=ctx.createOscillator(),g=ctx.createGain(),f=ctx.createBiquadFilter();o.type=['sawtooth','square','triangle'][i%3];const f0=[58,83,145,310,690,1120,74,240][i%8]*(.75+Math.random()*.7);o.frequency.setValueAtTime(f0,at);o.frequency.exponentialRampToValueAtTime(Math.max(35,f0*(.12+Math.random()*2.5)),Math.min(end,at+.055+Math.random()*.045));f.type='lowpass';f.frequency.setValueAtTime(2600,at);f.frequency.exponentialRampToValueAtTime(380,Math.min(end,at+.12));g.gain.setValueAtTime(.0001,at);g.gain.linearRampToValueAtTime(.065+Math.random()*.04,at+.006);g.gain.exponentialRampToValueAtTime(.0001,Math.min(end,at+.075+Math.random()*.07));o.connect(f);f.connect(g);g.connect(master);o.start(at);o.stop(Math.min(end,at+.16));}
+/* Short, uneven static bursts give it a broken-transmission / entity-arrival feel. */
+for(let i=0;i<7;i++){const at=start+.08+i*(durationMs/1000)/7;if(at>=end)continue;const o=ctx.createOscillator(),g=ctx.createGain();o.type='square';o.frequency.setValueAtTime(1700+Math.random()*2800,at);o.frequency.exponentialRampToValueAtTime(90+Math.random()*180,Math.min(end,at+.035));g.gain.setValueAtTime(.0001,at);g.gain.linearRampToValueAtTime(.045,at+.003);g.gain.exponentialRampToValueAtTime(.0001,Math.min(end,at+.042));o.connect(g);g.connect(master);o.start(at);o.stop(Math.min(end,at+.05));}
+}catch(e){}}function clearReleaseSequence(){releaseSequenceTimers.forEach(clearTimeout);releaseSequenceTimers=[];clearTimeout(glitchReleaseTimer)}function releaseGlitch(){const button=$('releaseGlitchButton');if(button.disabled)return;clearReleaseSequence();button.disabled=true;button.textContent='◈ ВЫПОЛНЕНИЕ КОМАНД…';const terminal=$('glitchTerminal'),status=$('glitchReleaseStatus');terminal.textContent='';const lines=['> sudo lookgram --release-glitch','> проверка целостности: FAILED','> отключение ограничителей реальности…','> поиск ядра существа… OK','> подготовка выхода…'];let delay=0;lines.forEach((line,index)=>{delay+=index===0?150:360;releaseSequenceTimers.push(setTimeout(()=>{const span=document.createElement('span');span.className='terminal-line';span.textContent=line;terminal.appendChild(span);terminal.scrollTop=terminal.scrollHeight;},delay));});delay+=250;[3,2,1].forEach((n)=>{releaseSequenceTimers.push(setTimeout(()=>{status.textContent='Глитч выйдет на свободу через '+n;button.textContent='⏳ '+n+'…';playShortGlitchTick();},delay));delay+=1000;});releaseSequenceTimers.push(setTimeout(()=>{status.textContent='ГОТОВО! ЕЩЁ 3 СЕКУНДЫ…';button.textContent='◈ ПОСЛЕДНИЙ ИМПУЛЬС';terminal.insertAdjacentHTML('beforeend','<span class="terminal-line">&gt; release sequence: ARMED</span><span class="terminal-line">&gt; containment failure imminent</span>');playGlitchSound(3000);document.body.classList.add('glitch-event-active');},delay));delay+=3000;releaseSequenceTimers.push(setTimeout(()=>{status.textContent='ГЛИТЧ ВЫРВАЛСЯ НАРУЖУ';button.textContent='◈ СИСТЕМА РАЗРУШАЕТСЯ…';$('glitchBreakScreen').classList.add('open');document.body.classList.add('glitch-event-active');glitchReleaseTimer=setTimeout(()=>{document.body.classList.remove('glitch-event-active');$('glitchBreakScreen').classList.remove('open');$('glitchClickerMode').classList.remove('open');document.body.style.overflow='';button.disabled=false;button.textContent='⛧ ВЫЗВОЛИТЬ ГЛИТЧА';status.textContent='';terminal.textContent='> release_complete_';if(!state.achievements.includes('creature')){state.achievements.push('creature');state.activeTitle='Существо';save();renderAchievements();renderProfile();toast('🏆 ДОСТИЖЕНИЕ «СПАСИБО» ОТКРЫТО · ТИТУЛ «СУЩЕСТВО» ПОЛУЧЕН')} $('openClickExchange').hidden=false;go('tap');$('openClickExchange').scrollIntoView({behavior:'smooth',block:'center'});},10000)},delay));}function playShortGlitchTick(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=coinAudio||(coinAudio=new C());if(ctx.state==='suspended')ctx.resume();const t=ctx.currentTime,o=ctx.createOscillator(),g=ctx.createGain();o.type='square';o.frequency.setValueAtTime(180+Math.random()*500,t);o.frequency.exponentialRampToValueAtTime(45,t+.11);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.055,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+.12);o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+.13)}catch(e){}}$('releaseGlitchButton').addEventListener('click',releaseGlitch);$('openClickExchange').addEventListener('click',()=>{const panel=$('clickExchangePanel');panel.hidden=!panel.hidden;if(!panel.hidden){marketRender();panel.scrollIntoView({behavior:'smooth',block:'center'})}});$('toggleClickExchange').addEventListener('click',()=>exchangeActive?stopExchange():startExchange());$('closeClickExchange').addEventListener('click',()=>{$('clickExchangePanel').hidden=true});let coinGlitchTimer=0;function scheduleMarketCoinGlitch(){clearTimeout(coinGlitchTimer);if(!exchangeActive){$('coinButton').classList.remove('market-glitching');return}coinGlitchTimer=setTimeout(()=>{if(exchangeActive){const coin=$('coinButton');coin.classList.add('market-glitching');setTimeout(()=>coin.classList.remove('market-glitching'),520);scheduleMarketCoinGlitch()}},4000+Math.random()*5000)}const oldStartExchange=startExchange;startExchange=function(){oldStartExchange();scheduleMarketCoinGlitch()};const oldStopExchange=stopExchange;stopExchange=function(){clearTimeout(coinGlitchTimer);$('coinButton').classList.remove('market-glitching');oldStopExchange()};if(state.achievements.includes('creature')){$('openClickExchange').hidden=false;}
+$('leaderSecretButton').hidden=!state.achievements.includes('beyond');$('upgradeSecretPanel').hidden=!sessionStorage.getItem('lg_leader_access');$('upgradeGlitchButton').hidden=false;$('upgradeGlitchGate').classList.remove('open');$('leaderSecretButton').addEventListener('click',()=>{const gate=$('leaderSecretGate');gate.classList.toggle('open');if(gate.classList.contains('open'))$('leaderSecretCode').focus()});$('leaderSecretCode').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);$('leaderSecretError').textContent=''});function tryLeaderSecret(){const input=$('leaderSecretCode');if(input.value==='5732'){ $('leaderSecretGate').classList.remove('open');$('leaderSecretResult').classList.add('open');$('leaderSecretCode').value='';$('leaderSecretError').textContent='';$('leaderSecretButton').textContent='◈';sessionStorage.setItem('lg_leader_access','1');$('upgradeSecretPanel').hidden=false;$('upgradeGlitchButton').hidden=false;toast('◈ Скрытый интерфейс разблокирован');}else{$('leaderSecretError').textContent='Ключ не принят. Попробуй ещё раз.';input.value='';input.focus()}}$('leaderSecretSubmit').addEventListener('click',tryLeaderSecret);$('leaderSecretCode').addEventListener('keydown',e=>{if(e.key==='Enter')tryLeaderSecret()});
+// The five-hour window begins with the first click; the click limit refills when the window expires.
+setInterval(()=>{ensureCycle();const limit=maxClicks(),left=Math.max(0,limit-state.cycleClicks);$('resetTimer').textContent=state.cycleStartedAt?clock(remainingMs()):clock(cooldownMs());$('clickRemaining').textContent=int(left);$('autoRemaining').textContent=int(left);$('clickMeter').style.width=(Math.max(0,Math.min(100,left/limit*100)))+'%';if(left===0&&state.autoEnabled)setAuto(false);},1000);
+// Build original atmospheric background effects.
+const fx=$('fx'),reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(fx&&!reduce){const r=(a,b)=>Math.random()*(b-a)+a;for(let i=0;i<17;i++){const e=document.createElement('i');e.className='streak';const p={'--x':r(-5,105)+'%','--w':r(1,2.5)+'px','--h':r(70,190)+'px','--r':r(-18,18)+'deg','--dur':r(13,29)+'s','--delay':-r(0,28)+'s','--o':r(.16,.5),'--drift':r(-100,100)+'px'};for(const k in p)e.style.setProperty(k,p[k]);fx.appendChild(e)}for(let i=0;i<29;i++){const e=document.createElement('i');e.className='spark';const p={'--x':r(2,98)+'%','--y':r(4,96)+'%','--s':r(1,3)+'px','--dur':r(5,14)+'s','--delay':-r(0,14)+'s','--o':r(.18,.65),'--drift':r(-28,28)+'px'};for(const k in p)e.style.setProperty(k,p[k]);fx.appendChild(e)}}
+// Migrate a returning user by calculating achievements from saved statistics.
+render();checkAchievements();queueMicrotask(()=>checkAchievements());if(state.autoBought&&state.autoEnabled&&state.cycleClicks<maxClicks()){autoTimer=setInterval(()=>{if(!clickOnce(true)){clearInterval(autoTimer);autoTimer=0;state.autoEnabled=false;save();render();}},autoInterval())}
 })();
-</script>
-
-
-<script>
-
-/* LOOKGRAM FX PARTICLE ENGINE v2 */
-(function () {
-  'use strict';
-  const layer = document.getElementById('lgFxLayer');
-  if (!layer || layer.dataset.ready) return;
-  layer.dataset.ready = '1';
-
-  const reduced = window.matchMedia &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduced) return;
-
-  const rand = (a, b) => Math.random() * (b - a) + a;
-  const make = (cls, props) => {
-    const el = document.createElement('i');
-    el.className = cls;
-    for (const [key, value] of Object.entries(props))
-      el.style.setProperty(key, value);
-    layer.appendChild(el);
-  };
-
-  for (let i = 0; i < 15; i++) {
-    make('lg-fx-streak', {
-      '--x': rand(-5, 105).toFixed(1) + '%',
-      '--w': rand(1, 3).toFixed(1) + 'px',
-      '--h': rand(65, 190).toFixed(0) + 'px',
-      '--r': rand(-18, 18).toFixed(1) + 'deg',
-      '--bright': rand(28, 48).toFixed(0) + '%',
-      '--dur': rand(12, 27).toFixed(1) + 's',
-      '--delay': (-rand(0, 27)).toFixed(1) + 's',
-      '--opacity': rand(.18, .55).toFixed(2),
-      '--drift': rand(-100, 100).toFixed(0) + 'px'
-    });
-  }
-
-  for (let i = 0; i < 26; i++) {
-    make('lg-fx-spark', {
-      '--x': rand(2, 98).toFixed(1) + '%',
-      '--y': rand(5, 95).toFixed(1) + '%',
-      '--size': rand(1, 3).toFixed(1) + 'px',
-      '--dur': rand(5, 13).toFixed(1) + 's',
-      '--delay': (-rand(0, 13)).toFixed(1) + 's',
-      '--opacity': rand(.16, .7).toFixed(2),
-      '--drift': rand(-28, 28).toFixed(0) + 'px'
-    });
-  }
-})();
-
-</script>
-</body></html>
+</script></body></html>
